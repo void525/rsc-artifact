@@ -1,0 +1,104 @@
+# N18: N = 200 extended-candidate sensitivity (500-query subsets of cal/test per domain; heads and cheap models of the main configuration)
+# RSC-Rank main configuration.  Every experiment reads this file; the decision
+# ladder (graph/graph.yaml -> ladder) edits it in place when budgets bind.
+project: rsc-rank-www2027
+seed: 20260920
+
+paths:
+  data_raw: data/raw/beir
+  train_questions: data/raw/train_questions
+  splits: data/N200/splits
+  candidates: data/N200/candidates
+  features: data/N200/features
+  teacher: data/N200/teacher
+  frozen: data/N200/frozen
+  models: models
+  runs: runs/N200
+
+domains:
+  main: [nq, hotpotqa]          # N18: N=200 sensitivity on the pre-specified 500-query subsets
+  cross: []
+  extra: []
+  test_pool_split: {nq: test, hotpotqa: test, fiqa: test, scifact: test, msmarco: dev}   # BEIR msmarco evaluates on its dev split
+
+splits:                          # nominal sizes (Sec. 12.1); actual counts are recorded in runs/data/splits_manifest.json
+  nq:       {n_cal: 1000, n_train: 4000, n_dev: 1000}
+  hotpotqa: {n_cal: 2000, n_train: 4000, n_dev: 1000}
+  fiqa:     {cross_domain_only: true}
+  scifact:  {cross_domain_only: true}
+  msmarco:  {n_cal: 2000, n_train: 4000, n_dev: 1000}   # used only if domains.extra contains msmarco
+  dedup_jaccard: 0.8
+
+candidates:
+  backend: bm25s                 # bm25s (default: pure Python, Windows-safe) | pyserini (prebuilt beir-v1.0.0-<domain>.flat, needs Java 21) | python (smoke only)
+  N: 200   # N18
+  N_grid: [50, 100, 200]         # 50 = prefix of the 100 list; 200 = extended subset only
+  extended_subset_queries: 500   # per main domain, pre-specified by seed, shared by all methods
+  sanity_tolerance_ndcg: 0.01    # |our BM25 nDCG@10 - pyserini 2CR reference| must be below this (pyserini backend)
+
+cheap:
+  model: minilm-distilled        # N18 helper config: distilled features for bge-m3 (data/N200/features_distilled/bge-m3)
+  model_by_teacher:              # D-DISTILL outcome (N08, 2026-09-22, dev temp-split calls@0.05, adopt iff >= 10 % relative gain):
+    bge-m3: minilm-distilled     #   bge-m3: 71.25 -> 53.78 calls (-24.5 %) -> adopted; qwen3-4b: 68.00 -> 61.49 (-9.6 %) -> NOT adopted (keeps minilm)
+  batch_size: 128
+  distill:                       # optional lever (node N08, pre-registered in docs/PREREGISTRATION.md): fine-tune MiniLM on TRAIN teacher scores
+    enabled: false
+    epochs: 2
+    lr: 2.0e-5
+    batch_size: 64
+    max_length: 256
+    min_rel_gain: 0.10           # adopt only if dev calls@alpha improve by >= 10% relative
+
+teachers:
+  main: qwen3-4b
+  second: bge-m3
+  qwen3-4b: {max_length: 512, batch_size: 16, dtype: bfloat16, attn: sdpa, mode: canonical, max_tokens_per_batch: 65536}
+  bge-m3:   {max_length: 512, batch_size: 32, dtype: float16, mode: canonical, max_tokens_per_batch: 65536}
+  # mode: fast = length-sorted dynamic batches (max throughput); canonical = fixed microbatch shape
+  # (batch_size rows, lengths padded to multiples of 64, dummy rows) so a pair's score cannot depend on its batch-mates.
+  # N05 measures both and picks by the rule in graph/nodes/N05_pilot.md.
+  determinism_pairs: 1000        # re-score this many pairs to audit repeat/batch-order consistency
+
+heads:
+  hidden: 128
+  kappa: 1.0
+  lr_grid: [0.001, 0.0003]
+  wd_grid: [0.0, 0.0001]
+  epochs: 20
+  patience: 3
+  batch_size: 512
+  selection_alpha: 0.05          # model selection = teacher calls at this risk on the dev temp-split (Sec. 10.6)
+  pooled_across_domains: true
+
+protocol:
+  k: 10
+  k_grid: [1, 5, 10, 20]
+  alpha_main: 0.05
+  alpha_grid: [0.01, 0.025, 0.05, 0.1]
+  r_grid: [1, 2, 3]
+  regimes: [marginal, pac, finite]
+  primary_regime: finite         # a random split of a FIXED benchmark pool: the finite-population guarantee is the one that is about the reported test set
+  delta_family: 0.05
+  n_main_configs: 6              # 3 domains x 2 teachers (A5: MS MARCO promoted to the main family; delta_cfg = delta_family / 6)
+  batch_first: 16
+  batch_rest: 8
+  batch_grid: [8, 16, 32]
+  policies: [mu, cheap_raw, bm25, length_asc, length_desc, random, observed_regression, alternating_bm25, mu_binned_length, mu_alt]   # A3: observed_regression = multi-feature refit; mu_alt = other cheap model order
+  noninferiority_epsilon: 0.005
+  bootstrap: 2000
+  latency_queries: 300           # per config for real end-to-end measurement
+  latency_repeats: 3
+
+success_targets:                 # pre-registered continue/stop thresholds (Sec. 18.1); NOT predictions
+  calls_reduction_min: 0.30
+  latency_reduction_min: 0.20
+  strict_alpha_report: 0.01
+
+budget:                          # planning numbers, not measurements (Sec. 17)
+  gpu_hours_total: 550
+  teacher_core_hours: 220
+  v_min_pairs_per_s: 2.7532
+  pilot_pairs: 2000
+
+smoke:                           # set by scripts when --synthetic is used; never edit by hand
+  synthetic: false

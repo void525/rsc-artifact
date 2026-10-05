@@ -1,0 +1,119 @@
+{
+ "claim_level": "policy-uniform-protection-with-cost",
+ "configs": {
+  "bge-m3/hotpotqa": {
+   "calls_reduction": 0.30473265494912116,
+   "gates": {
+    "beats_adaptive_prefix_calls": false,
+    "beats_uniform_prefix_calls": false,
+    "calls_reduction_ge_target": true,
+    "efficiency_not_failed": true,
+    "ndcg_noninferior": true,
+    "policy_uniform_risk_ok": true,
+    "risk_marginal_not_significantly_above": true,
+    "risk_within_alpha_primary": true
+   },
+   "ndcg_full": 0.7958935876701391,
+   "ndcg_rsc": 0.7955790790229449,
+   "risk": 0.026641998149861238,
+   "risk_marginal": 0.032377428307123035
+  },
+  "bge-m3/msmarco": {
+   "calls_reduction": 0.5076385542168675,
+   "gates": {
+    "beats_adaptive_prefix_calls": false,
+    "beats_uniform_prefix_calls": true,
+    "calls_reduction_ge_target": true,
+    "efficiency_not_failed": true,
+    "ndcg_noninferior": true,
+    "policy_uniform_risk_ok": true,
+    "risk_marginal_not_significantly_above": true,
+    "risk_within_alpha_primary": true
+   },
+   "ndcg_full": 0.41428481968541453,
+   "ndcg_rsc": 0.4144056473584557,
+   "risk": 0.02469879518072289,
+   "risk_marginal": 0.03293172690763052
+  },
+  "bge-m3/nq": {
+   "calls_reduction": 0.4505709624796085,
+   "gates": {
+    "beats_adaptive_prefix_calls": false,
+    "beats_uniform_prefix_calls": true,
+    "calls_reduction_ge_target": true,
+    "efficiency_not_failed": true,
+    "ndcg_noninferior": true,
+    "policy_uniform_risk_ok": true,
+    "risk_marginal_not_significantly_above": true,
+    "risk_within_alpha_primary": true
+   },
+   "ndcg_full": 0.598745949461454,
+   "ndcg_rsc": 0.5987601578721883,
+   "risk": 0.02528548123980424,
+   "risk_marginal": 0.03221859706362153
+  },
+  "qwen3-4b/hotpotqa": {
+   "calls_reduction": 0.14587974098057355,
+   "gates": {
+    "beats_adaptive_prefix_calls": false,
+    "beats_uniform_prefix_calls": true,
+    "calls_reduction_ge_target": false,
+    "efficiency_not_failed": true,
+    "ndcg_noninferior": true,
+    "policy_uniform_risk_ok": true,
+    "risk_marginal_not_significantly_above": true,
+    "risk_within_alpha_primary": true
+   },
+   "ndcg_full": 0.7912144947358789,
+   "ndcg_rsc": 0.7909395435137809,
+   "risk": 0.035522664199814986,
+   "risk_marginal": 0.04514338575393154
+  },
+  "qwen3-4b/msmarco": {
+   "calls_reduction": 0.3978393574297189,
+   "gates": {
+    "beats_adaptive_prefix_calls": false,
+    "beats_uniform_prefix_calls": true,
+    "calls_reduction_ge_target": true,
+    "efficiency_not_failed": true,
+    "ndcg_noninferior": true,
+    "policy_uniform_risk_ok": true,
+    "risk_marginal_not_significantly_above": true,
+    "risk_within_alpha_primary": true
+   },
+   "ndcg_full": 0.38962136152404503,
+   "ndcg_rsc": 0.389680586347183,
+   "risk": 0.019477911646586344,
+   "risk_marginal": 0.028714859437751004
+  },
+  "qwen3-4b/nq": {
+   "calls_reduction": 0.33929853181076663,
+   "gates": {
+    "beats_adaptive_prefix_calls": false,
+    "beats_uniform_prefix_calls": true,
+    "calls_reduction_ge_target": true,
+    "efficiency_not_failed": true,
+    "ndcg_noninferior": true,
+    "policy_uniform_risk_ok": true,
+    "risk_marginal_not_significantly_above": true,
+    "risk_within_alpha_primary": true
+   },
+   "ndcg_full": 0.590328693113424,
+   "ndcg_rsc": 0.5901883092960055,
+   "risk": 0.03221859706362153,
+   "risk_marginal": 0.04445350734094616
+  }
+ },
+ "gates": {
+  "all_calls_reduction_ge_target": false,
+  "all_risk_within_alpha": true,
+  "any_efficiency_failure": false,
+  "beats_adaptive_prefix_everywhere": false,
+  "beats_uniform_prefix_everywhere": false,
+  "ndcg_noninferior_everywhere": true,
+  "no_marginal_risk_violation": true,
+  "policy_uniform_everywhere": true
+ },
+ "primary_regime": "finite",
+ "synthetic": false
+}

@@ -1,0 +1,150 @@
+project: rsc-rank-www2027
+seed: 20260920
+paths:
+  data_raw: data/raw/beir
+  train_questions: data/raw/train_questions
+  splits: data/splits
+  candidates: data/candidates
+  features: data/features
+  teacher: data/teacher
+  frozen: runs/distilled_eval/frozen
+  models: models_distilled_eval
+  runs: runs/distilled_eval
+domains:
+  main:
+  - nq
+  - hotpotqa
+  cross:
+  - fiqa
+  - scifact
+  extra:
+  - msmarco
+  test_pool_split:
+    nq: test
+    hotpotqa: test
+    fiqa: test
+    scifact: test
+    msmarco: dev
+splits:
+  nq:
+    n_cal: 1000
+    n_train: 4000
+    n_dev: 1000
+  hotpotqa:
+    n_cal: 2000
+    n_train: 4000
+    n_dev: 1000
+  fiqa:
+    cross_domain_only: true
+  scifact:
+    cross_domain_only: true
+  msmarco:
+    n_cal: 2000
+    n_train: 4000
+    n_dev: 1000
+  dedup_jaccard: 0.8
+candidates:
+  backend: bm25s
+  N: 100
+  N_grid:
+  - 50
+  - 100
+  - 200
+  extended_subset_queries: 500
+  sanity_tolerance_ndcg: 0.01
+cheap:
+  model: minilm-distilled
+  batch_size: 128
+  distill:
+    enabled: false
+    epochs: 2
+    lr: 2.0e-05
+    batch_size: 64
+    max_length: 256
+    min_rel_gain: 0.1
+teachers:
+  main: qwen3-4b
+  second: bge-m3
+  qwen3-4b:
+    max_length: 512
+    batch_size: 16
+    dtype: bfloat16
+    attn: sdpa
+    mode: canonical
+    max_tokens_per_batch: 65536
+  bge-m3:
+    max_length: 512
+    batch_size: 32
+    dtype: float16
+    mode: canonical
+    max_tokens_per_batch: 65536
+  determinism_pairs: 1000
+heads:
+  hidden: 128
+  kappa: 1.0
+  lr_grid:
+  - 0.001
+  - 0.0003
+  wd_grid:
+  - 0.0
+  - 0.0001
+  epochs: 20
+  patience: 3
+  batch_size: 512
+  selection_alpha: 0.05
+  pooled_across_domains: true
+protocol:
+  k: 10
+  k_grid:
+  - 1
+  - 5
+  - 10
+  - 20
+  alpha_main: 0.05
+  alpha_grid:
+  - 0.01
+  - 0.025
+  - 0.05
+  - 0.1
+  r_grid:
+  - 1
+  - 2
+  - 3
+  regimes:
+  - marginal
+  - pac
+  - finite
+  primary_regime: finite
+  delta_family: 0.05
+  n_main_configs: 6              # A5
+  batch_first: 16
+  batch_rest: 8
+  batch_grid:
+  - 8
+  - 16
+  - 32
+  policies:
+  - mu
+  - cheap_raw
+  - bm25
+  - length_asc
+  - length_desc
+  - random
+  - observed_regression
+  - alternating_bm25
+  - mu_binned_length
+  noninferiority_epsilon: 0.005
+  bootstrap: 2000
+  latency_queries: 300
+  latency_repeats: 3
+success_targets:
+  calls_reduction_min: 0.3
+  latency_reduction_min: 0.2
+  strict_alpha_report: 0.01
+budget:
+  gpu_hours_total: 550
+  teacher_core_hours: 220
+  v_min_pairs_per_s: 2.7532
+  pilot_pairs: 2000
+smoke:
+  synthetic: false

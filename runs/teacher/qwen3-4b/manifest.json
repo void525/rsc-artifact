@@ -1,0 +1,273 @@
+{
+ "files": {
+  "data/teacher/qwen3-4b/fiqa/test.npz": {
+   "pairs": 64800,
+   "queries": 648,
+   "seconds": 906.7,
+   "settings_key": {
+    "attn": "sdpa",
+    "batch_size": 16,
+    "class": "Qwen3RerankerScorer",
+    "dtype": "bfloat16",
+    "instruction": "Given a web search query, retrieve relevant passages that answer the query",
+    "max_length": 512,
+    "max_tokens_per_batch": 65536,
+    "mode": "canonical",
+    "name": "Qwen/Qwen3-Reranker-4B"
+   },
+   "sha256": "cf0c2d9d5d0843b6f6e33b73de790733d84c886f890c69f58938d81cf03ada6b"
+  },
+  "data/teacher/qwen3-4b/hotpotqa/cal.npz": {
+   "pairs": 200000,
+   "queries": 2000,
+   "seconds": 1449.9,
+   "settings_key": {
+    "attn": "sdpa",
+    "batch_size": 16,
+    "class": "Qwen3RerankerScorer",
+    "dtype": "bfloat16",
+    "instruction": "Given a web search query, retrieve relevant passages that answer the query",
+    "max_length": 512,
+    "max_tokens_per_batch": 65536,
+    "mode": "canonical",
+    "name": "Qwen/Qwen3-Reranker-4B"
+   },
+   "sha256": "8d7a935c490107d72d54304b72dbe2c2da6691841fd57280f767d1237c25c54b"
+  },
+  "data/teacher/qwen3-4b/hotpotqa/dev.npz": {
+   "pairs": 100000,
+   "queries": 1000,
+   "seconds": 731.2,
+   "settings_key": {
+    "attn": "sdpa",
+    "batch_size": 16,
+    "class": "Qwen3RerankerScorer",
+    "dtype": "bfloat16",
+    "instruction": "Given a web search query, retrieve relevant passages that answer the query",
+    "max_length": 512,
+    "max_tokens_per_batch": 65536,
+    "mode": "canonical",
+    "name": "Qwen/Qwen3-Reranker-4B"
+   },
+   "sha256": "2216effc8bfaff2da9c530ca8242b59a6d0014628b2c99e4d5f556df1d3d32d6"
+  },
+  "data/teacher/qwen3-4b/hotpotqa/test.npz": {
+   "pairs": 540500,
+   "queries": 5405,
+   "seconds": 3918.9,
+   "settings_key": {
+    "attn": "sdpa",
+    "batch_size": 16,
+    "class": "Qwen3RerankerScorer",
+    "dtype": "bfloat16",
+    "instruction": "Given a web search query, retrieve relevant passages that answer the query",
+    "max_length": 512,
+    "max_tokens_per_batch": 65536,
+    "mode": "canonical",
+    "name": "Qwen/Qwen3-Reranker-4B"
+   },
+   "sha256": "62a1353f0a9b6e730a637a5a7ff1aa77b8eb308f4bd1a0459e326876d1e728ee"
+  },
+  "data/teacher/qwen3-4b/hotpotqa/train.npz": {
+   "pairs": 400000,
+   "queries": 4000,
+   "seconds": 2949.7,
+   "settings_key": {
+    "attn": "sdpa",
+    "batch_size": 16,
+    "class": "Qwen3RerankerScorer",
+    "dtype": "bfloat16",
+    "instruction": "Given a web search query, retrieve relevant passages that answer the query",
+    "max_length": 512,
+    "max_tokens_per_batch": 65536,
+    "mode": "canonical",
+    "name": "Qwen/Qwen3-Reranker-4B"
+   },
+   "sha256": "9284cc6ae8f6f4b9d910e6c15f594bc0cd277350acf4e86684f41a6ae8563df6"
+  },
+  "data/teacher/qwen3-4b/msmarco/cal.npz": {
+   "pairs": 200000,
+   "queries": 2000,
+   "seconds": 1278.5,
+   "settings_key": {
+    "attn": "sdpa",
+    "batch_size": 16,
+    "class": "Qwen3RerankerScorer",
+    "dtype": "bfloat16",
+    "instruction": "Given a web search query, retrieve relevant passages that answer the query",
+    "max_length": 512,
+    "max_tokens_per_batch": 65536,
+    "mode": "canonical",
+    "name": "Qwen/Qwen3-Reranker-4B"
+   },
+   "sha256": "a5a2224ca3eb15443de8d42e7851d940d44eed9e6e0b00bea591158424456491"
+  },
+  "data/teacher/qwen3-4b/msmarco/dev.npz": {
+   "pairs": 100000,
+   "queries": 1000,
+   "seconds": 647.1,
+   "settings_key": {
+    "attn": "sdpa",
+    "batch_size": 16,
+    "class": "Qwen3RerankerScorer",
+    "dtype": "bfloat16",
+    "instruction": "Given a web search query, retrieve relevant passages that answer the query",
+    "max_length": 512,
+    "max_tokens_per_batch": 65536,
+    "mode": "canonical",
+    "name": "Qwen/Qwen3-Reranker-4B"
+   },
+   "sha256": "b316dcc6c4b10840b12752edd6d06e6cf95d46d1cea4726b8427af1b4d9e80d7"
+  },
+  "data/teacher/qwen3-4b/msmarco/test.npz": {
+   "pairs": 498000,
+   "queries": 4980,
+   "seconds": 3177.1,
+   "settings_key": {
+    "attn": "sdpa",
+    "batch_size": 16,
+    "class": "Qwen3RerankerScorer",
+    "dtype": "bfloat16",
+    "instruction": "Given a web search query, retrieve relevant passages that answer the query",
+    "max_length": 512,
+    "max_tokens_per_batch": 65536,
+    "mode": "canonical",
+    "name": "Qwen/Qwen3-Reranker-4B"
+   },
+   "sha256": "1219d1fdcb9a5ea9c6637ac82561a59643655bfb94853040ab60c5bcf22790d9"
+  },
+  "data/teacher/qwen3-4b/msmarco/train.npz": {
+   "pairs": 400000,
+   "queries": 4000,
+   "seconds": 2571.7,
+   "settings_key": {
+    "attn": "sdpa",
+    "batch_size": 16,
+    "class": "Qwen3RerankerScorer",
+    "dtype": "bfloat16",
+    "instruction": "Given a web search query, retrieve relevant passages that answer the query",
+    "max_length": 512,
+    "max_tokens_per_batch": 65536,
+    "mode": "canonical",
+    "name": "Qwen/Qwen3-Reranker-4B"
+   },
+   "sha256": "61868dd90218018f0183762166046482f2a6877b3edff890f5d9e8770ad5aff3"
+  },
+  "data/teacher/qwen3-4b/nq/cal.npz": {
+   "pairs": 100000,
+   "queries": 1000,
+   "seconds": 881.9,
+   "settings_key": {
+    "attn": "sdpa",
+    "batch_size": 16,
+    "class": "Qwen3RerankerScorer",
+    "dtype": "bfloat16",
+    "instruction": "Given a web search query, retrieve relevant passages that answer the query",
+    "max_length": 512,
+    "max_tokens_per_batch": 65536,
+    "mode": "canonical",
+    "name": "Qwen/Qwen3-Reranker-4B"
+   },
+   "sha256": "2f7566b7c7285dd15a8bc8224dff18b0e440842016417a6f6dfd65900d19d071"
+  },
+  "data/teacher/qwen3-4b/nq/dev.npz": {
+   "pairs": 100000,
+   "queries": 1000,
+   "seconds": 889.9,
+   "settings_key": {
+    "attn": "sdpa",
+    "batch_size": 16,
+    "class": "Qwen3RerankerScorer",
+    "dtype": "bfloat16",
+    "instruction": "Given a web search query, retrieve relevant passages that answer the query",
+    "max_length": 512,
+    "max_tokens_per_batch": 65536,
+    "mode": "canonical",
+    "name": "Qwen/Qwen3-Reranker-4B"
+   },
+   "sha256": "24a426a7a626b1344fd8acf671812c59429716650528b73ed4c8bd51c2f28208"
+  },
+  "data/teacher/qwen3-4b/nq/test.npz": {
+   "pairs": 245200,
+   "queries": 2452,
+   "seconds": 2159.7,
+   "settings_key": {
+    "attn": "sdpa",
+    "batch_size": 16,
+    "class": "Qwen3RerankerScorer",
+    "dtype": "bfloat16",
+    "instruction": "Given a web search query, retrieve relevant passages that answer the query",
+    "max_length": 512,
+    "max_tokens_per_batch": 65536,
+    "mode": "canonical",
+    "name": "Qwen/Qwen3-Reranker-4B"
+   },
+   "sha256": "5f93b5ac4c87b5b7746e5738d9b4fd165d6c54098c8dd6b8c153e49182650e5b"
+  },
+  "data/teacher/qwen3-4b/nq/train.npz": {
+   "pairs": 400000,
+   "queries": 4000,
+   "seconds": 3571.2,
+   "settings_key": {
+    "attn": "sdpa",
+    "batch_size": 16,
+    "class": "Qwen3RerankerScorer",
+    "dtype": "bfloat16",
+    "instruction": "Given a web search query, retrieve relevant passages that answer the query",
+    "max_length": 512,
+    "max_tokens_per_batch": 65536,
+    "mode": "canonical",
+    "name": "Qwen/Qwen3-Reranker-4B"
+   },
+   "sha256": "2a2b54eef1cc4707455256b2dc4570020ca9dfc1a065b421b428153e3f6ea000"
+  },
+  "data/teacher/qwen3-4b/scifact/test.npz": {
+   "pairs": 30000,
+   "queries": 300,
+   "seconds": 470.4,
+   "settings_key": {
+    "attn": "sdpa",
+    "batch_size": 16,
+    "class": "Qwen3RerankerScorer",
+    "dtype": "bfloat16",
+    "instruction": "Given a web search query, retrieve relevant passages that answer the query",
+    "max_length": 512,
+    "max_tokens_per_batch": 65536,
+    "mode": "canonical",
+    "name": "Qwen/Qwen3-Reranker-4B"
+   },
+   "sha256": "e7f4582812482d8549364407ea6468406579d44cf98a304bb912fa9fb1b86656"
+  }
+ },
+ "incomplete_debug_stores": [],
+ "missing_scores": 0,
+ "model": "Qwen/Qwen3-Reranker-4B",
+ "n_distinct_settings": 1,
+ "ok": true,
+ "pairs": 3378500,
+ "seconds": 25603.896200180054,
+ "settings": {
+  "attn": "sdpa",
+  "batch_size": 16,
+  "canonical_multiple": 64,
+  "class": "Qwen3RerankerScorer",
+  "cuda": "13.0",
+  "device": "cuda",
+  "dtype": "bfloat16",
+  "fast_pad_multiple": 8,
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "instruction": "Given a web search query, retrieve relevant passages that answer the query",
+  "max_length": 512,
+  "max_tokens_per_batch": 65536,
+  "mode": "canonical",
+  "model_id": "Qwen/Qwen3-Reranker-4B",
+  "name": "Qwen/Qwen3-Reranker-4B",
+  "no_id": 2152,
+  "padding_side": "left",
+  "score": "z_yes - z_no at the last position (fp32 two-row head)",
+  "torch": "2.14.0+cu130",
+  "transformers": "5.17.0",
+  "yes_id": 9693
+ },
+ "teacher": "qwen3-4b"
+}

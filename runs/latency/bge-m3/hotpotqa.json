@@ -1,0 +1,161 @@
+{
+ "N": 100,
+ "alpha": 0.05,
+ "cache_for_agreement": true,
+ "cheap_model": "minilm-distilled:bge-m3",
+ "cuda_sync": true,
+ "domain": "hotpotqa",
+ "k": 10,
+ "n_queries": 300,
+ "policy": "mu",
+ "regimes": {
+  "controlled": {
+   "full": {
+    "agree_with_cache": 1.0,
+    "agree_with_cache_n": 900,
+    "batch_size": 32,
+    "calls_mean": 100.0,
+    "latency_mean_s": 0.12935283903860384,
+    "latency_p50_s": 0.1228780448436737,
+    "latency_p95_s": 0.1896498890593648,
+    "peak_mem_gb": 1.66,
+    "teacher_s_mean": 0.129115434375902,
+    "throughput_qps_sequential": 7.73079282551782
+   },
+   "prefix_adaptive": {
+    "agree_with_cache": 0.98,
+    "agree_with_cache_n": 900,
+    "batch_size": 32,
+    "calls_mean": 63.38666666666666,
+    "latency_mean_s": 0.13501382870806589,
+    "latency_p50_s": 0.12843937426805496,
+    "latency_p95_s": 0.20409682728350162,
+    "peak_mem_gb": 2.09,
+    "teacher_s_mean": 0.1035154751729634,
+    "throughput_qps_sequential": 7.40664870827605
+   },
+   "prefix_uniform": {
+    "agree_with_cache": 0.9666666666666667,
+    "agree_with_cache_n": 900,
+    "batch_size": 32,
+    "calls_mean": 69.0,
+    "latency_mean_s": 0.13862023945483898,
+    "latency_p50_s": 0.13123219087719917,
+    "latency_p95_s": 0.20598060190677642,
+    "peak_mem_gb": 2.09,
+    "teacher_s_mean": 0.10688507358647055,
+    "throughput_qps_sequential": 7.213953777116289
+   },
+   "rsc": {
+    "agree_with_cache": 0.98,
+    "agree_with_cache_n": 900,
+    "batch_size": 32,
+    "calls_mean": 69.38666666666667,
+    "latency_mean_s": 0.4331120197226604,
+    "latency_p50_s": 0.4279272351413965,
+    "latency_p95_s": 0.7588938545435667,
+    "peak_mem_gb": 2.09,
+    "teacher_s_mean": 0.39952157482504846,
+    "throughput_qps_sequential": 2.3088715031283167
+   },
+   "rsc_blockers": {
+    "agree_with_cache": 0.98,
+    "agree_with_cache_n": 900,
+    "batch_size": 32,
+    "calls_mean": 69.66666666666667,
+    "latency_mean_s": 0.18748396032800277,
+    "latency_p50_s": 0.18947714380919933,
+    "latency_p95_s": 0.27992546185851097,
+    "peak_mem_gb": 2.09,
+    "teacher_s_mean": 0.15483398909370105,
+    "throughput_qps_sequential": 5.33378961192468
+   },
+   "rsc_blockers_vs_full_latency_reduction": -0.44939965540339144,
+   "rsc_vs_full_latency_reduction": -2.3482992947174757
+  },
+  "tuned": {
+   "full": {
+    "agree_with_cache": 0.9466666666666667,
+    "agree_with_cache_n": 900,
+    "batch_size": 16,
+    "calls_mean": 100.0,
+    "latency_mean_s": 0.10239459898322821,
+    "latency_p50_s": 0.1000764574855566,
+    "latency_p95_s": 0.13555937632918358,
+    "peak_mem_gb": 1.46,
+    "teacher_s_mean": 0.10219030696898698,
+    "throughput_qps_sequential": 9.766140108266802
+   },
+   "prefix_adaptive": {
+    "agree_with_cache": 0.9266666666666666,
+    "agree_with_cache_n": 900,
+    "batch_size": 16,
+    "calls_mean": 63.38666666666666,
+    "latency_mean_s": 0.11015079128659434,
+    "latency_p50_s": 0.10694469511508942,
+    "latency_p95_s": 0.15489998515695333,
+    "peak_mem_gb": 2.09,
+    "teacher_s_mean": 0.07846632624665896,
+    "throughput_qps_sequential": 9.078464061126565
+   },
+   "prefix_uniform": {
+    "agree_with_cache": 0.9133333333333333,
+    "agree_with_cache_n": 900,
+    "batch_size": 16,
+    "calls_mean": 69.0,
+    "latency_mean_s": 0.11366364918235275,
+    "latency_p50_s": 0.10994162783026695,
+    "latency_p95_s": 0.15548676755279303,
+    "peak_mem_gb": 2.09,
+    "teacher_s_mean": 0.08207406911998988,
+    "throughput_qps_sequential": 8.797887514553409
+   },
+   "rsc": {
+    "agree_with_cache": 0.9333333333333333,
+    "agree_with_cache_n": 900,
+    "batch_size": 8,
+    "calls_mean": 69.44,
+    "latency_mean_s": 0.21538562642203438,
+    "latency_p50_s": 0.22028986178338528,
+    "latency_p95_s": 0.3406222714111209,
+    "peak_mem_gb": 2.09,
+    "teacher_s_mean": 0.18198774134119353,
+    "throughput_qps_sequential": 4.642835348913041
+   },
+   "rsc_vs_full_latency_reduction": -1.1034862049443994
+  }
+ },
+ "synthetic": false,
+ "teacher": "bge-m3",
+ "teacher_settings": {
+  "attn": null,
+  "batch_size": 32,
+  "canonical_multiple": 64,
+  "class": "BGERerankerScorer",
+  "cuda": "13.0",
+  "device": "cuda",
+  "dtype": "float16",
+  "fast_pad_multiple": 8,
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "max_length": 512,
+  "max_tokens_per_batch": 65536,
+  "mode": "canonical",
+  "model_id": "BAAI/bge-reranker-v2-m3",
+  "name": "BAAI/bge-reranker-v2-m3",
+  "padding_side": "right",
+  "query_max_length": 384,
+  "score": "raw logit (fp32 classification head)",
+  "torch": "2.14.0+cu130",
+  "transformers": "5.17.0",
+  "truncation": "query<=3/4*max_length, only_second"
+ },
+ "variants": {
+  "rsc_blockers": {
+   "batch_first": 32,
+   "batch_rest_or_min": 16,
+   "policy": "mu",
+   "schedule": "blockers"
+  }
+ },
+ "warmup_queries": 5
+}

@@ -1,0 +1,161 @@
+{
+ "N": 100,
+ "alpha": 0.05,
+ "cache_for_agreement": true,
+ "cheap_model": "minilm-distilled:bge-m3",
+ "cuda_sync": true,
+ "domain": "msmarco",
+ "k": 10,
+ "n_queries": 300,
+ "policy": "mu",
+ "regimes": {
+  "controlled": {
+   "full": {
+    "agree_with_cache": 1.0,
+    "agree_with_cache_n": 900,
+    "batch_size": 32,
+    "calls_mean": 100.0,
+    "latency_mean_s": 0.08780715880708562,
+    "latency_p50_s": 0.08786045201122761,
+    "latency_p95_s": 0.12077682223170995,
+    "peak_mem_gb": 1.53,
+    "teacher_s_mean": 0.08762795627117156,
+    "throughput_qps_sequential": 11.388593066734153
+   },
+   "prefix_adaptive": {
+    "agree_with_cache": 0.94,
+    "agree_with_cache_n": 900,
+    "batch_size": 32,
+    "calls_mean": 44.13333333333333,
+    "latency_mean_s": 0.07914278361118503,
+    "latency_p50_s": 0.07897534966468811,
+    "latency_p95_s": 0.11108903456479308,
+    "peak_mem_gb": 1.88,
+    "teacher_s_mean": 0.05621012342472871,
+    "throughput_qps_sequential": 12.635390800920387
+   },
+   "prefix_uniform": {
+    "agree_with_cache": 0.95,
+    "agree_with_cache_n": 900,
+    "batch_size": 32,
+    "calls_mean": 53.0,
+    "latency_mean_s": 0.08642238169080681,
+    "latency_p50_s": 0.08582629263401031,
+    "latency_p95_s": 0.11466725226491689,
+    "peak_mem_gb": 1.88,
+    "teacher_s_mean": 0.06312501416438156,
+    "throughput_qps_sequential": 11.571076617370927
+   },
+   "rsc": {
+    "agree_with_cache": 0.96,
+    "agree_with_cache_n": 900,
+    "batch_size": 32,
+    "calls_mean": 49.666666666666664,
+    "latency_mean_s": 0.21498401249862378,
+    "latency_p50_s": 0.19341493397951126,
+    "latency_p95_s": 0.44348483569920055,
+    "peak_mem_gb": 1.88,
+    "teacher_s_mean": 0.1906632803297705,
+    "throughput_qps_sequential": 4.651508679076317
+   },
+   "rsc_blockers": {
+    "agree_with_cache": 0.9666666666666667,
+    "agree_with_cache_n": 900,
+    "batch_size": 32,
+    "calls_mean": 51.67666666666667,
+    "latency_mean_s": 0.10730687450617551,
+    "latency_p50_s": 0.10314840823411942,
+    "latency_p95_s": 0.16394253969192504,
+    "peak_mem_gb": 1.88,
+    "teacher_s_mean": 0.08344480972737074,
+    "throughput_qps_sequential": 9.319067437216708
+   },
+   "rsc_blockers_vs_full_latency_reduction": -0.22207432701394225,
+   "rsc_vs_full_latency_reduction": -1.4483654342005154
+  },
+  "tuned": {
+   "full": {
+    "agree_with_cache": 0.9666666666666667,
+    "agree_with_cache_n": 900,
+    "batch_size": 16,
+    "calls_mean": 100.0,
+    "latency_mean_s": 0.08052854466769431,
+    "latency_p50_s": 0.08188618533313274,
+    "latency_p95_s": 0.09633284118026493,
+    "peak_mem_gb": 1.39,
+    "teacher_s_mean": 0.08034839608603053,
+    "throughput_qps_sequential": 12.417956938456516
+   },
+   "prefix_adaptive": {
+    "agree_with_cache": 0.9066666666666666,
+    "agree_with_cache_n": 900,
+    "batch_size": 16,
+    "calls_mean": 44.13333333333333,
+    "latency_mean_s": 0.0686804473772645,
+    "latency_p50_s": 0.06698729656636715,
+    "latency_p95_s": 0.09163548983633518,
+    "peak_mem_gb": 1.88,
+    "teacher_s_mean": 0.04592755383087529,
+    "throughput_qps_sequential": 14.560184713226446
+   },
+   "prefix_uniform": {
+    "agree_with_cache": 0.9166666666666666,
+    "agree_with_cache_n": 900,
+    "batch_size": 16,
+    "calls_mean": 53.0,
+    "latency_mean_s": 0.0749716802355316,
+    "latency_p50_s": 0.07442161813378334,
+    "latency_p95_s": 0.095652118884027,
+    "peak_mem_gb": 1.88,
+    "teacher_s_mean": 0.05192112727711598,
+    "throughput_qps_sequential": 13.338369859904333
+   },
+   "rsc": {
+    "agree_with_cache": 0.9266666666666666,
+    "agree_with_cache_n": 900,
+    "batch_size": 8,
+    "calls_mean": 49.693333333333335,
+    "latency_mean_s": 0.12727206111368206,
+    "latency_p50_s": 0.11692819558084011,
+    "latency_p95_s": 0.2407890871167183,
+    "peak_mem_gb": 1.88,
+    "teacher_s_mean": 0.10329280652105809,
+    "throughput_qps_sequential": 7.857183982482842
+   },
+   "rsc_vs_full_latency_reduction": -0.5804589743783097
+  }
+ },
+ "synthetic": false,
+ "teacher": "bge-m3",
+ "teacher_settings": {
+  "attn": null,
+  "batch_size": 32,
+  "canonical_multiple": 64,
+  "class": "BGERerankerScorer",
+  "cuda": "13.0",
+  "device": "cuda",
+  "dtype": "float16",
+  "fast_pad_multiple": 8,
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "max_length": 512,
+  "max_tokens_per_batch": 65536,
+  "mode": "canonical",
+  "model_id": "BAAI/bge-reranker-v2-m3",
+  "name": "BAAI/bge-reranker-v2-m3",
+  "padding_side": "right",
+  "query_max_length": 384,
+  "score": "raw logit (fp32 classification head)",
+  "torch": "2.14.0+cu130",
+  "transformers": "5.17.0",
+  "truncation": "query<=3/4*max_length, only_second"
+ },
+ "variants": {
+  "rsc_blockers": {
+   "batch_first": 32,
+   "batch_rest_or_min": 16,
+   "policy": "mu",
+   "schedule": "blockers"
+  }
+ },
+ "warmup_queries": 5
+}

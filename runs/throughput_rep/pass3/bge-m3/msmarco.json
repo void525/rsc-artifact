@@ -1,0 +1,156 @@
+{
+ "N": 100,
+ "alpha": 0.05,
+ "blocker_schedule": {
+  "first": 32,
+  "min_batch": 16
+ },
+ "cheap_model": "minilm-distilled:bge-m3",
+ "concurrency": [
+  32
+ ],
+ "domain": "msmarco",
+ "k": 10,
+ "methods": {
+  "full": {
+   "32": {
+    "agree_n": 300,
+    "agree_with_cache": 1.0,
+    "calls_mean": 100.0,
+    "cheap_s": 0.0,
+    "dummy_row_fraction": 0.030506721820062047,
+    "dummy_rows": 944,
+    "forward_passes": 967,
+    "gpu_s_per_query": 0.04892992318918308,
+    "gpu_s_ratio_vs_full": 1.0,
+    "latency_mean_s": 1.5092867661515872,
+    "latency_p50_s": 1.526595864444971,
+    "latency_p95_s": 1.7076756162568927,
+    "padded_tokens": 4571136,
+    "real_tokens": 3265792,
+    "rows": 30944,
+    "teacher_wall_s": 14.678976956754923,
+    "throughput_gain_vs_full": 0.0,
+    "throughput_qps": 20.437391575980843,
+    "wall_s": 14.678976956754923
+   }
+  },
+  "prefix_adaptive": {
+   "32": {
+    "agree_n": 300,
+    "agree_with_cache": 0.95,
+    "calls_mean": 44.32,
+    "cheap_s": 6.699864383786917,
+    "dummy_row_fraction": 0.07046979865771812,
+    "dummy_rows": 1008,
+    "forward_passes": 447,
+    "gpu_s_per_query": 0.04568466822306315,
+    "gpu_s_ratio_vs_full": 0.9336754534935106,
+    "latency_mean_s": 0.7270115044961373,
+    "latency_p50_s": 0.7343041524291039,
+    "latency_p95_s": 0.9674438351765275,
+    "padded_tokens": 2117632,
+    "real_tokens": 1421830,
+    "rows": 14304,
+    "teacher_wall_s": 7.005536083132029,
+    "throughput_gain_vs_full": 0.07103597535773765,
+    "throughput_qps": 21.88918162034865,
+    "wall_s": 13.705400466918945
+   }
+  },
+  "prefix_uniform": {
+   "32": {
+    "agree_n": 300,
+    "agree_with_cache": 0.95,
+    "calls_mean": 54.0,
+    "cheap_s": 6.868921652436256,
+    "dummy_row_fraction": 0.05901486988847584,
+    "dummy_rows": 1016,
+    "forward_passes": 538,
+    "gpu_s_per_query": 0.050115005237360795,
+    "gpu_s_ratio_vs_full": 1.0242199858682735,
+    "latency_mean_s": 0.847508268704017,
+    "latency_p50_s": 0.8451184723526239,
+    "latency_p95_s": 1.057598221115768,
+    "padded_tokens": 2535424,
+    "real_tokens": 1734360,
+    "rows": 17216,
+    "teacher_wall_s": 8.165579918771982,
+    "throughput_gain_vs_full": -0.023647249812003057,
+    "throughput_qps": 19.954103471877897,
+    "wall_s": 15.034501571208239
+   }
+  },
+  "rsc": {
+   "32": {
+    "agree_n": 300,
+    "agree_with_cache": 0.96,
+    "calls_mean": 49.946666666666665,
+    "cheap_s": 6.768681529909372,
+    "dummy_row_fraction": 0.2386178861788618,
+    "dummy_rows": 4696,
+    "forward_passes": 615,
+    "gpu_s_per_query": 0.05465184984107812,
+    "gpu_s_ratio_vs_full": 1.11694125555382,
+    "latency_mean_s": 0.983683712904652,
+    "latency_p50_s": 0.8964166231453419,
+    "latency_p95_s": 2.1219906462356457,
+    "padded_tokens": 3078144,
+    "real_tokens": 1603012,
+    "rows": 19680,
+    "teacher_wall_s": 9.626873422414064,
+    "throughput_gain_vs_full": -0.10469776720337576,
+    "throughput_qps": 18.29764231051457,
+    "wall_s": 16.395554952323437
+   }
+  },
+  "rsc_blockers": {
+   "32": {
+    "agree_n": 300,
+    "agree_with_cache": 0.9666666666666667,
+    "calls_mean": 51.973333333333336,
+    "cheap_s": 6.813446123152971,
+    "dummy_row_fraction": 0.08754681647940075,
+    "dummy_rows": 1496,
+    "forward_passes": 534,
+    "gpu_s_per_query": 0.04999005400886138,
+    "gpu_s_ratio_vs_full": 1.0216663086835311,
+    "latency_mean_s": 0.8473021895065904,
+    "latency_p50_s": 0.9737398866564035,
+    "latency_p95_s": 1.1322679497301578,
+    "padded_tokens": 2541568,
+    "real_tokens": 1663827,
+    "rows": 17088,
+    "teacher_wall_s": 8.183570079505444,
+    "throughput_gain_vs_full": -0.021206834853396583,
+    "throughput_qps": 20.00397918799482,
+    "wall_s": 14.997016202658415
+   }
+  }
+ },
+ "n_queries": 300,
+ "policy": "mu",
+ "teacher": "bge-m3",
+ "teacher_settings": {
+  "attn": null,
+  "batch_size": 32,
+  "canonical_multiple": 64,
+  "class": "BGERerankerScorer",
+  "cuda": "13.0",
+  "device": "cuda",
+  "dtype": "float16",
+  "fast_pad_multiple": 8,
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "max_length": 512,
+  "max_tokens_per_batch": 65536,
+  "mode": "canonical",
+  "model_id": "BAAI/bge-reranker-v2-m3",
+  "name": "BAAI/bge-reranker-v2-m3",
+  "padding_side": "right",
+  "query_max_length": 384,
+  "score": "raw logit (fp32 classification head)",
+  "torch": "2.14.0+cu130",
+  "transformers": "5.17.0",
+  "truncation": "query<=3/4*max_length, only_second"
+ }
+}

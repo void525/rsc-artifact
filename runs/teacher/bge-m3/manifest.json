@@ -1,0 +1,272 @@
+{
+ "files": {
+  "data/teacher/bge-m3/fiqa/test.npz": {
+   "pairs": 64800,
+   "queries": 648,
+   "seconds": 82.2,
+   "settings_key": {
+    "attn": null,
+    "batch_size": 32,
+    "class": "BGERerankerScorer",
+    "dtype": "float16",
+    "max_length": 512,
+    "max_tokens_per_batch": 65536,
+    "mode": "canonical",
+    "name": "BAAI/bge-reranker-v2-m3",
+    "query_max_length": 384
+   },
+   "sha256": "e624d5c466085a9af7b1f07fc0fa1dcc08b67eac420573edab27cb8914b1a3c8"
+  },
+  "data/teacher/bge-m3/hotpotqa/cal.npz": {
+   "pairs": 200000,
+   "queries": 2000,
+   "seconds": 114.3,
+   "settings_key": {
+    "attn": null,
+    "batch_size": 32,
+    "class": "BGERerankerScorer",
+    "dtype": "float16",
+    "max_length": 512,
+    "max_tokens_per_batch": 65536,
+    "mode": "canonical",
+    "name": "BAAI/bge-reranker-v2-m3",
+    "query_max_length": 384
+   },
+   "sha256": "78aaaf5ca6da19f2a106724b2dc399a4cb9b3ecc9ef16eb3911a8e07ac2b2f13"
+  },
+  "data/teacher/bge-m3/hotpotqa/dev.npz": {
+   "pairs": 100000,
+   "queries": 1000,
+   "seconds": 58.2,
+   "settings_key": {
+    "attn": null,
+    "batch_size": 32,
+    "class": "BGERerankerScorer",
+    "dtype": "float16",
+    "max_length": 512,
+    "max_tokens_per_batch": 65536,
+    "mode": "canonical",
+    "name": "BAAI/bge-reranker-v2-m3",
+    "query_max_length": 384
+   },
+   "sha256": "7a47fa0277a8170c2b00200b29c15a0718afafa1873faa0a24417c203ecb7e32"
+  },
+  "data/teacher/bge-m3/hotpotqa/test.npz": {
+   "pairs": 540500,
+   "queries": 5405,
+   "seconds": 314.1,
+   "settings_key": {
+    "attn": null,
+    "batch_size": 32,
+    "class": "BGERerankerScorer",
+    "dtype": "float16",
+    "max_length": 512,
+    "max_tokens_per_batch": 65536,
+    "mode": "canonical",
+    "name": "BAAI/bge-reranker-v2-m3",
+    "query_max_length": 384
+   },
+   "sha256": "088c7bf81131b2b6cf079ec3974325812e2f4e3560275b946dfa19c06108425e"
+  },
+  "data/teacher/bge-m3/hotpotqa/train.npz": {
+   "pairs": 400000,
+   "queries": 4000,
+   "seconds": 232.9,
+   "settings_key": {
+    "attn": null,
+    "batch_size": 32,
+    "class": "BGERerankerScorer",
+    "dtype": "float16",
+    "max_length": 512,
+    "max_tokens_per_batch": 65536,
+    "mode": "canonical",
+    "name": "BAAI/bge-reranker-v2-m3",
+    "query_max_length": 384
+   },
+   "sha256": "bad2abf19951f04a4453f0787d43d8c0857c16eedf22e535260b759958603f36"
+  },
+  "data/teacher/bge-m3/msmarco/cal.npz": {
+   "pairs": 200000,
+   "queries": 2000,
+   "seconds": 99.5,
+   "settings_key": {
+    "attn": null,
+    "batch_size": 32,
+    "class": "BGERerankerScorer",
+    "dtype": "float16",
+    "max_length": 512,
+    "max_tokens_per_batch": 65536,
+    "mode": "canonical",
+    "name": "BAAI/bge-reranker-v2-m3",
+    "query_max_length": 384
+   },
+   "sha256": "e505a8594b70d357b3c8ecf7b7affb9fe2cb8e09f7bc2031f5a671cd9725ab12"
+  },
+  "data/teacher/bge-m3/msmarco/dev.npz": {
+   "pairs": 100000,
+   "queries": 1000,
+   "seconds": 47.5,
+   "settings_key": {
+    "attn": null,
+    "batch_size": 32,
+    "class": "BGERerankerScorer",
+    "dtype": "float16",
+    "max_length": 512,
+    "max_tokens_per_batch": 65536,
+    "mode": "canonical",
+    "name": "BAAI/bge-reranker-v2-m3",
+    "query_max_length": 384
+   },
+   "sha256": "724871c515b5c98d9aad89f142618513e2992db295b1896bbe9fad003ff53fc2"
+  },
+  "data/teacher/bge-m3/msmarco/test.npz": {
+   "pairs": 498000,
+   "queries": 4980,
+   "seconds": 241.9,
+   "settings_key": {
+    "attn": null,
+    "batch_size": 32,
+    "class": "BGERerankerScorer",
+    "dtype": "float16",
+    "max_length": 512,
+    "max_tokens_per_batch": 65536,
+    "mode": "canonical",
+    "name": "BAAI/bge-reranker-v2-m3",
+    "query_max_length": 384
+   },
+   "sha256": "bde10ce2746b4dbd68390b09d15e5dd1a6dc2252c1e6b74cc2e98173c7b0e8b9"
+  },
+  "data/teacher/bge-m3/msmarco/train.npz": {
+   "pairs": 400000,
+   "queries": 4000,
+   "seconds": 194.5,
+   "settings_key": {
+    "attn": null,
+    "batch_size": 32,
+    "class": "BGERerankerScorer",
+    "dtype": "float16",
+    "max_length": 512,
+    "max_tokens_per_batch": 65536,
+    "mode": "canonical",
+    "name": "BAAI/bge-reranker-v2-m3",
+    "query_max_length": 384
+   },
+   "sha256": "84ddbb822a35411607c275516b5cbe2ef481757ed55e550e8c9d91d5a856adc4"
+  },
+  "data/teacher/bge-m3/nq/cal.npz": {
+   "pairs": 100000,
+   "queries": 1000,
+   "seconds": 74.4,
+   "settings_key": {
+    "attn": null,
+    "batch_size": 32,
+    "class": "BGERerankerScorer",
+    "dtype": "float16",
+    "max_length": 512,
+    "max_tokens_per_batch": 65536,
+    "mode": "canonical",
+    "name": "BAAI/bge-reranker-v2-m3",
+    "query_max_length": 384
+   },
+   "sha256": "7920174fe551b2b48247601d97c1f51a3726a6be776a33df4e16f6f278b50d77"
+  },
+  "data/teacher/bge-m3/nq/dev.npz": {
+   "pairs": 100000,
+   "queries": 1000,
+   "seconds": 73.3,
+   "settings_key": {
+    "attn": null,
+    "batch_size": 32,
+    "class": "BGERerankerScorer",
+    "dtype": "float16",
+    "max_length": 512,
+    "max_tokens_per_batch": 65536,
+    "mode": "canonical",
+    "name": "BAAI/bge-reranker-v2-m3",
+    "query_max_length": 384
+   },
+   "sha256": "dc22bbc1e6a2651cf5d8e5d801ff3cb40eaec038046922fb42e8931db1a2c7f6"
+  },
+  "data/teacher/bge-m3/nq/test.npz": {
+   "pairs": 245200,
+   "queries": 2452,
+   "seconds": 181.5,
+   "settings_key": {
+    "attn": null,
+    "batch_size": 32,
+    "class": "BGERerankerScorer",
+    "dtype": "float16",
+    "max_length": 512,
+    "max_tokens_per_batch": 65536,
+    "mode": "canonical",
+    "name": "BAAI/bge-reranker-v2-m3",
+    "query_max_length": 384
+   },
+   "sha256": "bab7ee7dca0815cd41e2994248a6b6fa2a3c9c10ecd8cca95fad69ec89204d47"
+  },
+  "data/teacher/bge-m3/nq/train.npz": {
+   "pairs": 400000,
+   "queries": 4000,
+   "seconds": 295.1,
+   "settings_key": {
+    "attn": null,
+    "batch_size": 32,
+    "class": "BGERerankerScorer",
+    "dtype": "float16",
+    "max_length": 512,
+    "max_tokens_per_batch": 65536,
+    "mode": "canonical",
+    "name": "BAAI/bge-reranker-v2-m3",
+    "query_max_length": 384
+   },
+   "sha256": "21b4ff1608d27fb316daf9d0dd0e15bebca5fc48a6fbc157ebb54d234c86a007"
+  },
+  "data/teacher/bge-m3/scifact/test.npz": {
+   "pairs": 30000,
+   "queries": 300,
+   "seconds": 44.5,
+   "settings_key": {
+    "attn": null,
+    "batch_size": 32,
+    "class": "BGERerankerScorer",
+    "dtype": "float16",
+    "max_length": 512,
+    "max_tokens_per_batch": 65536,
+    "mode": "canonical",
+    "name": "BAAI/bge-reranker-v2-m3",
+    "query_max_length": 384
+   },
+   "sha256": "836efef98178ab9427c20638c15ea9ed931c135f3d654920bbc5c8ea69d22563"
+  }
+ },
+ "incomplete_debug_stores": [],
+ "missing_scores": 0,
+ "model": "BAAI/bge-reranker-v2-m3",
+ "n_distinct_settings": 1,
+ "ok": true,
+ "pairs": 3378500,
+ "seconds": 2053.8776087760925,
+ "settings": {
+  "attn": null,
+  "batch_size": 32,
+  "canonical_multiple": 64,
+  "class": "BGERerankerScorer",
+  "cuda": "13.0",
+  "device": "cuda",
+  "dtype": "float16",
+  "fast_pad_multiple": 8,
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "max_length": 512,
+  "max_tokens_per_batch": 65536,
+  "mode": "canonical",
+  "model_id": "BAAI/bge-reranker-v2-m3",
+  "name": "BAAI/bge-reranker-v2-m3",
+  "padding_side": "right",
+  "query_max_length": 384,
+  "score": "raw logit (fp32 classification head)",
+  "torch": "2.14.0+cu130",
+  "transformers": "5.17.0",
+  "truncation": "query<=3/4*max_length, only_second"
+ },
+ "teacher": "bge-m3"
+}

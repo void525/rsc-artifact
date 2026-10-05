@@ -1,0 +1,5 @@
+# Nice-to-have; bootstrap.py installs these one by one and never fails because of them.
+datasets>=2.19          # only used by an alternative data path; the HF fallback works without it
+pytrec_eval-terrier     # cross-check of our pure-python trec_eval metrics (tests/test_replay_metrics.py)
+sentence-transformers   # convenience; not used by the pipeline
+hypothesis              # property-based tests (optional)

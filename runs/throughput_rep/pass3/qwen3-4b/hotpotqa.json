@@ -1,0 +1,157 @@
+{
+ "N": 100,
+ "alpha": 0.05,
+ "blocker_schedule": {
+  "first": 32,
+  "min_batch": 16
+ },
+ "cheap_model": "cross-encoder/ms-marco-MiniLM-L6-v2",
+ "concurrency": [
+  32
+ ],
+ "domain": "hotpotqa",
+ "k": 10,
+ "methods": {
+  "full": {
+   "32": {
+    "agree_n": 300,
+    "agree_with_cache": 1.0,
+    "calls_mean": 100.0,
+    "cheap_s": 0.0,
+    "dummy_row_fraction": 0.02394586153045289,
+    "dummy_rows": 736,
+    "forward_passes": 1921,
+    "gpu_s_per_query": 0.7503121042996646,
+    "gpu_s_ratio_vs_full": 1.0,
+    "latency_mean_s": 23.374441643891235,
+    "latency_p50_s": 23.98174401000142,
+    "latency_p95_s": 24.377445464394988,
+    "padded_tokens": 7203840,
+    "real_tokens": 5952976,
+    "rows": 30736,
+    "teacher_wall_s": 225.09363128989935,
+    "throughput_gain_vs_full": 0.0,
+    "throughput_qps": 1.3327787120446262,
+    "wall_s": 225.09363128989935
+   }
+  },
+  "prefix_adaptive": {
+   "32": {
+    "agree_n": 300,
+    "agree_with_cache": 0.9733333333333334,
+    "calls_mean": 82.59666666666666,
+    "cheap_s": 9.350196104496717,
+    "dummy_row_fraction": 0.025982704402515724,
+    "dummy_rows": 661,
+    "forward_passes": 1590,
+    "gpu_s_per_query": 0.651437669955194,
+    "gpu_s_ratio_vs_full": 0.8682222587402356,
+    "latency_mean_s": 19.33817470908165,
+    "latency_p50_s": 20.222406586632133,
+    "latency_p95_s": 21.344163355603815,
+    "padded_tokens": 5953536,
+    "real_tokens": 4907021,
+    "rows": 25440,
+    "teacher_wall_s": 186.08110488206148,
+    "throughput_gain_vs_full": 0.1517788100145805,
+    "throughput_qps": 1.5350662789715248,
+    "wall_s": 195.4313009865582
+   }
+  },
+  "prefix_uniform": {
+   "32": {
+    "agree_n": 300,
+    "agree_with_cache": 0.9633333333333334,
+    "calls_mean": 88.0,
+    "cheap_s": 9.349935311824083,
+    "dummy_row_fraction": 0.02654867256637168,
+    "dummy_rows": 720,
+    "forward_passes": 1695,
+    "gpu_s_per_query": 0.6893421071146926,
+    "gpu_s_ratio_vs_full": 0.9187404856784486,
+    "latency_mean_s": 20.519693740991254,
+    "latency_p50_s": 21.069507168605924,
+    "latency_p95_s": 21.34402018021792,
+    "padded_tokens": 6323200,
+    "real_tokens": 5212798,
+    "rows": 27120,
+    "teacher_wall_s": 197.45269682258368,
+    "throughput_gain_vs_full": 0.08844664580286232,
+    "throughput_qps": 1.4506585187224321,
+    "wall_s": 206.80263213440776
+   }
+  },
+  "rsc": {
+   "32": {
+    "agree_n": 300,
+    "agree_with_cache": 0.9633333333333334,
+    "calls_mean": 86.16,
+    "cheap_s": 9.420705370604992,
+    "dummy_row_fraction": 0.1723872950819672,
+    "dummy_rows": 5384,
+    "forward_passes": 1952,
+    "gpu_s_per_query": 0.8436603334918619,
+    "gpu_s_ratio_vs_full": 1.1244125326744232,
+    "latency_mean_s": 25.341809391764304,
+    "latency_p50_s": 29.3919419310987,
+    "latency_p95_s": 31.95525229778141,
+    "padded_tokens": 7721984,
+    "real_tokens": 5117518,
+    "rows": 31232,
+    "teacher_wall_s": 243.67739467695355,
+    "throughput_gain_vs_full": -0.11064669688313344,
+    "throughput_qps": 1.1853111498807314,
+    "wall_s": 253.09810004755855
+   }
+  },
+  "rsc_blockers": {
+   "32": {
+    "agree_n": 300,
+    "agree_with_cache": 0.9833333333333333,
+    "calls_mean": 86.63,
+    "cheap_s": 9.22109903767705,
+    "dummy_row_fraction": 0.04788247362250879,
+    "dummy_rows": 1307,
+    "forward_passes": 1706,
+    "gpu_s_per_query": 0.7050023759404819,
+    "gpu_s_ratio_vs_full": 0.9396121585943567,
+    "latency_mean_s": 21.164517274474104,
+    "latency_p50_s": 21.931681856513023,
+    "latency_p95_s": 23.387588310800492,
+    "padded_tokens": 6460416,
+    "real_tokens": 5145504,
+    "rows": 27296,
+    "teacher_wall_s": 202.2796137444675,
+    "throughput_gain_vs_full": 0.06426890164552845,
+    "throughput_qps": 1.4184349360042763,
+    "wall_s": 211.50071278214455
+   }
+  }
+ },
+ "n_queries": 300,
+ "policy": "mu",
+ "teacher": "qwen3-4b",
+ "teacher_settings": {
+  "attn": "sdpa",
+  "batch_size": 16,
+  "canonical_multiple": 64,
+  "class": "Qwen3RerankerScorer",
+  "cuda": "13.0",
+  "device": "cuda",
+  "dtype": "bfloat16",
+  "fast_pad_multiple": 8,
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "instruction": "Given a web search query, retrieve relevant passages that answer the query",
+  "max_length": 512,
+  "max_tokens_per_batch": 65536,
+  "mode": "canonical",
+  "model_id": "Qwen/Qwen3-Reranker-4B",
+  "name": "Qwen/Qwen3-Reranker-4B",
+  "no_id": 2152,
+  "padding_side": "left",
+  "score": "z_yes - z_no at the last position (fp32 two-row head)",
+  "torch": "2.14.0+cu130",
+  "transformers": "5.17.0",
+  "yes_id": 9693
+ }
+}
