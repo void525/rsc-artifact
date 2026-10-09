@@ -494,6 +494,63 @@ def blocker_critical_value(
     return float((tau0 - mu[mu_order[m_T - 1]]) / sg)
 
 
+def size_critical_value(
+    s: np.ndarray,
+    mu: np.ndarray,
+    sigma: np.ndarray,
+    k: int,
+    c: int,
+    ids: Optional[Sequence] = None,
+) -> float:
+    """max{ lambda*(V) : |V| = c, V misses a winner }  for k <= c < N  (r = 1), without enumeration.
+
+    Write W for the N - c unscored documents.  If the k-th scored document has teacher rank p, then tau(V) = s_(p),
+    W holds exactly p - k documents of rank < p (so at least one winner) and the rest from ranks > p.  For fixed p
+    the best W takes, in each of the two rank ranges, the documents with the largest (s_(p) - mu_j)/sigma_j, so the
+    value is a maximum over at most N - c ranks p.  c = N - 1 gives A_{k,1}(q)."""
+    s = np.asarray(s, dtype=float)
+    mu = np.asarray(mu, dtype=float)
+    sigma = np.asarray(sigma, dtype=float)
+    validate_instance(s, mu, sigma)
+    n = len(s)
+    if not (1 <= k < n) or not (k <= c < n):
+        raise ValueError("require 1 <= k <= c < N")
+    m = n - c
+    order = teacher_order(s, ids)
+    best = -math.inf
+    for p in range(k + 1, min(k + m, n) + 1):
+        hi, lo = p - k, m - (p - k)
+        if lo > n - p:
+            continue
+        tau = s[order[p - 1]]
+        z_hi = np.sort((tau - mu[order[: p - 1]]) / sigma[order[: p - 1]])[::-1]
+        val = float(z_hi[hi - 1])
+        if lo > 0:
+            z_lo = np.sort((tau - mu[order[p:]]) / sigma[order[p:]])[::-1]
+            val = min(val, float(z_lo[lo - 1]))
+        best = max(best, val)
+    return float(best)
+
+
+def grid_critical_value(
+    s: np.ndarray,
+    mu: np.ndarray,
+    sigma: np.ndarray,
+    k: int,
+    checkpoints: Sequence[int],
+    ids: Optional[Sequence] = None,
+) -> float:
+    """Critical value of every policy that evaluates the rule only at scored-set sizes in ``checkpoints`` (r = 1).
+
+    Adding documents to an unsafe set while keeping one winner out cannot lower lambda*, so the worst checkpoint is
+    the last one below N; -inf if no checkpoint size lies in [k, N)."""
+    n = len(np.asarray(s))
+    eligible = [int(c) for c in checkpoints if k <= int(c) < n]
+    if not eligible:
+        return -math.inf
+    return size_critical_value(s, mu, sigma, k, max(eligible), ids)
+
+
 def prefixes_from_trajectory(trajectory: Sequence[Sequence], ids: Sequence) -> List[List[int]]:
     """Turn a list of id-batches into nested position prefixes."""
     pos = {i: p for p, i in enumerate(ids)}

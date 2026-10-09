@@ -1,0 +1,34 @@
+{
+ "files": {
+  "data/fresh/teacher/qwen3-4b/hotpotqa/fresh.npz": {
+   "pairs": 200000,
+   "queries": 2000,
+   "seconds": 1512.6,
+   "sha256": "312d51fabae29fc52804d9751d92fa0324dd55b9a123c0b9d417bf79101bdb89"
+  },
+  "data/fresh/teacher/qwen3-4b/msmarco/fresh.npz": {
+   "pairs": 200000,
+   "queries": 2000,
+   "seconds": 1311.1,
+   "sha256": "09efd9338ef77b81cb4760c62bef18e53e94ab3044db1b2ba03168ac891ec343"
+  },
+  "data/fresh/teacher/qwen3-4b/nq/fresh.npz": {
+   "pairs": 200000,
+   "queries": 2000,
+   "seconds": 1819.7,
+   "sha256": "5a0b17b0811d918dd85f29d353c5669333da4d2235213dd7ade06e571eff4ca1"
+  }
+ },
+ "settings_key": {
+  "attn": "sdpa",
+  "batch_size": 16,
+  "class": "Qwen3RerankerScorer",
+  "dtype": "bfloat16",
+  "instruction": "Given a web search query, retrieve relevant passages that answer the query",
+  "max_length": 512,
+  "max_tokens_per_batch": 65536,
+  "mode": "canonical",
+  "name": "Qwen/Qwen3-Reranker-4B"
+ },
+ "teacher": "qwen3-4b"
+}

@@ -1432,7 +1432,7 @@
   "other": "minilm",
   "rsc_calls": 57.11164658634538,
   "rsc_risk": 0.021686746987951807,
-  "source": "/root/autodl-tmp/rsc-rank-www2027/runs/frozen_eval/replay/bge-m3/msmarco/summary.json"
+  "source": "runs/frozen_eval/replay/bge-m3/msmarco/summary.json"
  },
  "conditional": {
   "early_fraction": 0.9508032128514057,

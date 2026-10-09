@@ -1432,7 +1432,7 @@
   "other": "minilm-distilled",
   "rsc_calls": 60.54486133768352,
   "rsc_risk": 0.02406199021207178,
-  "source": "/root/autodl-tmp/rsc-rank-www2027/runs/distilled_eval/replay/qwen3-4b/nq/summary.json"
+  "source": "runs/distilled_eval/replay/qwen3-4b/nq/summary.json"
  },
  "conditional": {
   "early_fraction": 0.8609298531810766,

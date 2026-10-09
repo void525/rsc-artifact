@@ -89,19 +89,20 @@ For the deployed policy $\pi$ with its checkpoint schedule, $\mathrm{PoU}(q)=A_{
 operational counterpart is the difference in teacher calls (experiment E9 reports all three).  $\mathrm{PoU}=0$ on a
 query means uniform protection is free there; Prop. 4 shows it can multiply the calls by $N/k$ (a difference of $N-k$ calls).
 
-## 5c. Controllers that depend on $\lambda$ (review round 3; paper Proposition 5)
+## 5c. Controllers that depend on $\lambda$ (paper Proposition 5)
 
 A trajectory critical value (Sec. 5) is valid for a trajectory that does not depend on $\lambda$. A schedule that chooses
-its batches from the guardrails (the blocker schedule: first $b_0$ documents in $\mu$ order, then in one round every
-unscored $j$ with $(\tau(V)-\mu_j)/\sigma_j\le\lambda$, at least $b$) has a trajectory that changes with $\lambda$; the
+its batches from the guardrails (the blocker schedule, requiring $k\le b_0\le N$ and $b\ge 1$: first $b_0$ documents in $\mu$ order, then in one round every
+unscored $j$ with $(\tau(V)-\mu_j)/\sigma_j\le\lambda$, padded to at least $b$ along the same order) has a trajectory that changes with $\lambda$; the
+current blockers are what keeps this state from stopping, not the documents every later certified stop must score ($V^\star$); the
 critical value of a trajectory generated at a reference threshold $\lambda_0$ does not protect the schedule re-run at
 $\lambda\ne\lambda_0$. Counterexample: $k=1$, $s=(0,1,10)$, $\mu=(10,-5,-10)$, $\sigma\equiv1$, $b_0=b=1$; at $\lambda_0=11$ the
 trajectory is $\{d_1\},\{d_1,d_2,d_3\}$ with value $5$; at $\lambda=6$ the controller stops at $\{d_1,d_2\}$ and misses $d_3$.
 
 **Proposition ($\lambda$-dependent controllers).** If controllers $(\pi_\lambda)_\lambda$ err on $q$ iff $\lambda<a(q)$ for a query
 statistic $a$, then $a(q)\le A_{k,1}(q)$ and Theorems 6–8 hold for the family with $a$ in place of $A_{k,r}$. For the blocker
-schedule with a query-shared $\sigma$, with $m_T$ the $\mu$-rank of the last winner, $\tau_0$ the $k$-th score of the first
-round and $\mu_{[m]}$ the $m$-th largest prediction: $a^{\mathrm{blk}}=-\infty$ if $m_T\le b_0$; $\lambda^*(P_{b_0})$ if
+schedule with a query-shared $\sigma$ and an eligible first round ($k\le b_0$), with $m_T$ the $\mu$-rank of the last winner, $\tau_0$ the $k$-th score of the first
+round and $\mu_{[m]}$ the $m$-th largest prediction (undefined for $b_0<k$; the $k$-grid does not use it): $a^{\mathrm{blk}}=-\infty$ if $m_T\le b_0$; $\lambda^*(P_{b_0})$ if
 $b_0<m_T\le b_0+b$; $(\tau_0-\mu_{[m_T]})/\sigma$ otherwise. *Proof.* With a shared $\sigma$ the blockers are the first unscored
 documents in $\mu$ order; after the second round every remaining document has $(\tau_0-\mu_j)/\sigma>\lambda$ and $\tau$ can
 only grow, so the rule holds; that stop is correct iff the second round reaches $\mu$-rank $m_T$. $\square$
@@ -113,7 +114,7 @@ re-execution of the controller at every breakpoint of $\lambda$ on random instan
 
 ## 6. Proposition 11 (offline call lower bound)
 
-**Proposition 11.** $C^\star_{\mathrm{cert}}(q)=|T_k\cup\{j:U_j(\lambda)\ge s_{(k)}\}|$ is a lower bound on the calls of any correctly certified early stop: a correct stop has $\tau=s_{(k)}$ and requires all $j$ with $U_j\ge s_{(k)}$ to be scored (else the rule fails) and all of $T_k$ scored (else it is not correct). *Test:* `test_cert_lower_bound_is_a_lower_bound_on_calls_of_correct_early_stops`. (In the paper this statement is Proposition 11 in Appendix B, "Offline lower bound".)
+**Proposition 11.** $C^\star_{\mathrm{cert}}(q)=|T_k\cup\{j:U_j(\lambda)\ge s_{(k)}\}|$ is a lower bound on the calls of any correctly certified early stop: a correct stop has $\tau=s_{(k)}$ and requires all $j$ with $U_j\ge s_{(k)}$ to be scored (else the rule fails) and all of $T_k$ scored (else it is not correct). *Test:* `test_cert_lower_bound_is_a_lower_bound_on_calls_of_correct_early_stops`. (In the paper this statement is Proposition 7(a), "Cost Anatomy".)
 
 ## 6b. Proposition 10 (cost anatomy: what the calls are made of, and how close to optimal they are)
 

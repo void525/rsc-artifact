@@ -1,9 +1,9 @@
-"""The blocker-batch controller depends on lambda (review round 3, W3/Q2).
+"""The blocker-batch controller depends on lambda (paper Proposition 5).
 
 A trajectory frozen at one lambda does not certify the controller re-executed at another; the controller's own
 critical value (core.blocker_critical_value) does.  These tests check, by re-executing the controller at every
 breakpoint of lambda on random small instances, that the controller errs iff lambda < blocker_critical_value(q),
-and they reproduce the reviewer's counterexample.
+and they reproduce Example 2 of the paper.
 """
 import math
 
@@ -44,7 +44,7 @@ def frozen_trajectory_value(s, mu, sigma, k, first, min_batch, lam_ref):
     return core.trajectory_critical_value(np.asarray(s, float), np.asarray(mu, float), np.asarray(sigma, float), k, prefixes, 1, ids)
 
 
-def test_reviewer_counterexample():
+def test_example_2_frozen_trajectory_does_not_protect_a_rerun():
     s, mu, sigma = np.array([0.0, 1.0, 10.0]), np.array([10.0, -5.0, -10.0]), np.ones(3)
     k, first, min_batch = 1, 1, 1
     a_blk = core.blocker_critical_value(s, mu, sigma, k, None, first, min_batch)

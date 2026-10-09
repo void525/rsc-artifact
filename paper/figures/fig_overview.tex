@@ -1,0 +1,51 @@
+%% Figure 2: offline calibration of one scale, online reranking under any scheduler.
+%% Drawn in TikZ so that its type and mathematics are those of the paper.
+\begin{tikzpicture}[
+  font=\scriptsize, x=1cm, y=1cm,
+  >={Stealth[length=4.2pt,width=3.4pt]},
+  box/.style={draw=#1, line width=0.55pt, rounded corners=2.2pt, fill=white, align=center,
+              inner xsep=3pt, inner ysep=2.6pt, text=figink},
+  box/.default=figslate,
+  hot/.style={box=figteal, fill=figteal!7, line width=0.8pt},
+  flow/.style={->, line width=0.6pt, draw=figdark},
+  band/.style={rounded corners=4pt, line width=0.4pt},
+]
+%% ---------------- bands
+\fill[band, fill=figblue!5, draw=figblue!35] (-0.1,1.72) rectangle (17.6,3.62);
+\fill[band, fill=figorange!6, draw=figorange!45] (-0.1,-0.68) rectangle (17.6,1.36);
+\node[anchor=north west, font=\footnotesize\bfseries, text=figblue!85!black, inner sep=2pt] at (0.0,3.58) {Offline, once};
+\node[anchor=north west, font=\footnotesize\bfseries, text=figorange!80!black, inner sep=2pt] at (0.0,1.32) {Online, every query};
+%% ---------------- offline row
+\node[box, minimum height=1.12cm, text width=3.55cm] (cal) at (2.62,2.55)
+  {\textbf{Calibration queries}\\[1pt] full teacher scores $s_i$,\\ cheap $\mu_i$ and scale $\sigma_i$};
+\node[hot, minimum height=1.12cm, text width=5.9cm] (crit) at (8.45,2.55)
+  {\textbf{Rank-sufficient critical value of each query}\\[2pt]
+   $\displaystyle A_{k,1}(q)=\max_{i\in T_k(q)}\frac{s_{(k+1)}(q)-\mu_i(q)}{\sigma_i(q)}$\\[1pt]
+   {\color{figdark}how far each winner's guardrail must reach: the boundary, not its own score}};
+\node[box, minimum height=1.12cm, text width=3.65cm] (quant) at (14.95,2.55)
+  {\textbf{One quantile across queries}\\[1pt] $\lambda=a_{(j)}$, with $j$ set by the\\ marginal, PAC or finite-pool rule};
+\draw[flow] (cal) -- (crit);
+\draw[flow] (crit) -- (quant);
+%% ---------------- online row
+\node[box, minimum height=0.98cm, text width=2.0cm] (pool) at (1.2,0.36)
+  {\textbf{Query}\\[1pt] fixed candidate\\ pool $\mathcal{C}(q)$};
+\node[box, minimum height=0.98cm, text width=1.95cm] (cheap) at (3.83,0.36)
+  {\textbf{Cheap model}\\[1pt] $\mu_i$ and $\sigma_i$\\ for every candidate};
+\node[box=figorange, line width=0.8pt, fill=figorange!8, minimum height=0.98cm, text width=2.75cm] (sched) at (6.93,0.36)
+  {\textbf{Any scheduler}\\[1pt] any order, any batch sizes,\\ may read scores and $\lambda$};
+\node[box, minimum height=0.98cm, text width=2.0cm] (teach) at (10.05,0.36)
+  {\textbf{Frozen teacher}\\[1pt] exact $s_i=F(q,d_i)$\\ for each batch};
+\node[hot, minimum height=0.98cm, text width=2.95cm] (test) at (13.42,0.36)
+  {\textbf{Strict stopping test}\\[1pt] $\tau(V)>\max_{j\notin V}(\mu_j+\lambda\sigma_j)$};
+\node[box, minimum height=0.98cm, text width=1.5cm] (out) at (16.6,0.36)
+  {\textbf{Return}\\[1pt] the ordered\\ top-$k$ of $V$};
+\draw[flow] (pool) -- (cheap);
+\draw[flow] (cheap) -- (sched);
+\draw[flow] (sched) -- (teach);
+\draw[flow] (teach) -- (test);
+\draw[flow] (test) -- node[above, font=\scriptsize, text=figdark, inner sep=1pt] {pass} (out);
+\draw[flow, dashed, draw=figdark!80] (test.south) -- ++(0,-0.26) -| node[pos=0.25, below, font=\scriptsize, text=figdark, inner sep=1pt] {fail: score the next batch} (sched.south);
+%% ---------------- the shared scale
+\draw[flow, draw=figblue!85!black, line width=0.8pt] (14.25,1.99) -- (14.25,0.85);
+\node[anchor=west, font=\scriptsize, text=figblue!85!black, inner sep=1pt] at (14.33,1.54) {the same $\lambda$ for every scheduler};
+\end{tikzpicture}

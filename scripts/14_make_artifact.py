@@ -6,7 +6,9 @@ paper/tools/check_anonymity.py before it is written.
 """
 from __future__ import annotations
 
+import hashlib
 import io
+import json
 import sys
 import zipfile
 from pathlib import Path
@@ -17,7 +19,8 @@ from _common import ROOT, base_parser, load_config, log  # noqa: E402
 INCLUDE_DIRS = ["src", "tests", "scripts", "configs", "graphctl", "paper/tools", "docs"]
 INCLUDE_FILES = ["requirements.txt", "requirements-optional.txt", "bootstrap.py", "README_ARTIFACT.md"]
 EXCLUDE_PARTS = {".git", ".cursor", "__pycache__", ".pytest_cache", ".venv", "runs", "data", "models"}
-EXCLUDE_NAMES = {"AUTHORS.private.md", "AUTHORS.private.md.example", "anonymity_patterns.txt", "research_plan_www1_zh.md", "REAL_MINI_RUN.md"}
+EXCLUDE_NAMES = {"AUTHORS.private.md", "AUTHORS.private.md.example", "anonymity_patterns.txt", "research_plan_www1_zh.md", "REAL_MINI_RUN.md",
+                 "test_graphctl.py"}  # it tests the .cursor hooks, which are not shipped
 # files that legitimately *name* the identity files / patterns (they are the tooling itself)
 SELF_REFERENTIAL = {"scripts/13_build_packet.py", "scripts/14_make_artifact.py", "paper/tools/check_anonymity.py", "paper/tools/check_paper.py"}
 EMAIL_RE = __import__("re").compile(rb"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
@@ -76,16 +79,41 @@ def main() -> int:
     runs = ROOT / cfg["paths"]["runs"]
     extra_globs = ["stats/**/*.json", "replay/*/*/summary.json", "latency/**/*.json", "throughput/**/*.json", "policy_envelope/**/*.json",
                    "provenance/*.json", "pilot/*.json", "teacher/*/manifest.json", "N200/**/summary.json", "N200/calib/*/*/lambdas.json",
-                   "review3/**/*.json", "throughput_rep/**/*.json"]
+                   "review3/**/*.json", "throughput_rep/**/*.json", "matched_service/**/*.json",
+                   "a8_split/**/*.json", "a8_split/PROTOCOL.txt", "latency_tuned_diff/**/*.json", "data/*.json", "data/LICENSES.md",
+                   "N200/*.json", "N200h/*.json", "candidates/manifest.json", "teacher/*/determinism.json", "heads/*/report.json",
+                   "frozen_eval/heads/*/report.json", "distilled_eval/heads/*/report.json", "fresh/**/*.json", "own_target/**/*.json"]
     for g in extra_globs:
         for f in sorted(runs.glob(g)):
             if f.is_file() and f.stat().st_size < 5_000_000:
                 payload[str(f.relative_to(ROOT)).replace("\\", "/")] = f.read_bytes()
-    for f in sorted((ROOT / "paper" / "tables").glob("*.tex")) + [ROOT / "paper" / "numbers.json", ROOT / "paper" / "numbers.tex"]:
+    # manifests of the fresh-query pipeline (seed, de-duplication counts, file hashes); the query texts are not shipped
+    for f in sorted((ROOT / "data" / "fresh").glob("**/manifest.json")):
+        payload[str(f.relative_to(ROOT)).replace("\\", "/")] = f.read_bytes()
+    for f in sorted((ROOT / "paper" / "tables").glob("*.tex")) + [ROOT / "paper" / "numbers.json", ROOT / "paper" / "numbers.tex",
+                                                                  ROOT / "paper" / "numbers_extra.tex"]:
         if f.is_file():
             payload[str(f.relative_to(ROOT)).replace("\\", "/")] = f.read_bytes()
-    for f in sorted((ROOT / "paper" / "figures").glob("*.pdf")):
+    for f in sorted((ROOT / "paper" / "figures").glob("*.pdf")) + sorted((ROOT / "paper" / "figures").glob("fig_*.tex")):
         payload[str(f.relative_to(ROOT)).replace("\\", "/")] = f.read_bytes()
+    # build-machine paths are not part of the artifact: recorded sources become relative to the repository root
+    # (text files only; rewriting bytes inside a PDF would break its cross-reference offsets)
+    root_prefix = (str(ROOT) + "/").encode("utf-8")
+    original = {}
+    for name, blob in payload.items():
+        if name.endswith((".json", ".tex", ".md", ".txt", ".yaml")) and root_prefix in blob:
+            original[name] = blob
+            payload[name] = blob.replace(root_prefix, b"")
+    # the shipped registry must verify against the shipped files: a source rewritten above gets the hash of its
+    # rewritten bytes, but only if its registered hash matched the original bytes
+    reg_name = "runs/provenance/registry.json"
+    if reg_name in payload:
+        reg = json.loads(payload[reg_name])
+        for rec in reg.values():
+            src = rec.get("source", "")
+            if src in original and rec.get("source_sha256") == hashlib.sha256(original[src]).hexdigest():
+                rec["source_sha256"] = hashlib.sha256(payload[src]).hexdigest()
+        payload[reg_name] = json.dumps(reg, indent=1, ensure_ascii=False, sort_keys=True).encode("utf-8")
     ids = identity_strings()
     leaks = []
     for name, blob in payload.items():

@@ -1,0 +1,55 @@
+%% Figure 1: the worked example of Section 1 on one score axis (k = 2, sigma_i = 1).
+%% Open circles: cheap predictions. Filled: teacher scores. Dashed: the boundary s_(k+1).
+%% Thick teal: the rank-sufficient gap, from a winner's prediction to the boundary.
+%% Thin slate, drawn just above the row: the score-coverage gap, from a prediction to its score.
+\begin{tikzpicture}[x=1cm,y=1cm,font=\footnotesize,
+  sdot/.style={circle,fill=figink,inner sep=0pt,minimum size=3.8pt},
+  mdot/.style={circle,draw=figink,fill=white,line width=0.55pt,inner sep=0pt,minimum size=4.2pt},
+  cov/.style={line width=0.85pt,draw=figslate,line cap=round},
+  rs/.style={line width=2.15pt,draw=figteal,line cap=round},
+]
+\def\ax{1.48}\def\sc{0.56}
+\def\yaxis{0.55}\def\ya{3.05}\def\yb{2.38}\def\yc{1.58}\def\yd{0.92}\def\ytop{3.38}
+%% axis
+\draw[line width=0.4pt,black!65] (\ax,\yaxis) -- ({\ax+10*\sc},\yaxis);
+\foreach \t in {0,1,...,10}{\draw[line width=0.4pt,black!65] ({\ax+\t*\sc},\yaxis) -- ++(0,-0.05);}
+\foreach \t in {0,5,10}{\node[font=\scriptsize,text=black!65,anchor=north,inner sep=1pt] at ({\ax+\t*\sc},\yaxis-0.06) {$\t$};}
+%% boundary
+\draw[figteal,line width=0.65pt,dash pattern=on 2.2pt off 1.5pt] ({\ax+7*\sc},\yaxis) -- ({\ax+7*\sc},\ytop);
+\node[text=figteal,font=\scriptsize,anchor=south,inner sep=1pt] at ({\ax+7*\sc},\ytop) {$s_{(k+1)}$};
+%% labels
+\node[anchor=east,inner sep=1pt,text=figink] at (0.42,\ya) {$d_1$};
+\node[anchor=east,inner sep=1pt,text=figink] at (0.42,\yb) {$d_2$};
+\node[anchor=east,inner sep=1pt,text=black!45] at (0.42,\yc) {$d_3$};
+\node[anchor=east,inner sep=1pt,text=black!45] at (0.42,\yd) {$d_4$};
+\node[font=\scriptsize,text=figteal,anchor=east,inner sep=1pt] at (0.42,3.28) {winners};
+%% d1: prediction already past the boundary; only a short coverage gap remains
+\draw[cov] ({\ax+8*\sc},\ya+0.11) -- ({\ax+9*\sc},\ya+0.11);
+\node[mdot] at ({\ax+8*\sc},\ya) {};
+\node[sdot] at ({\ax+9*\sc},\ya) {};
+%% d2: the stop needs the thick gap of length 1; coverage continues to the score
+\draw[cov] ({\ax+6*\sc},\yb+0.13) -- ({\ax+8*\sc},\yb+0.13);
+\draw[rs] ({\ax+6*\sc},\yb) -- ({\ax+7*\sc},\yb);
+\node[mdot] at ({\ax+6*\sc},\yb) {};
+\node[sdot] at ({\ax+8*\sc},\yb) {};
+\node[text=figteal,font=\scriptsize,anchor=north east,inner sep=1pt] at ({\ax+6.9*\sc},\yb-0.06) {$A_{2,1}=1$};
+\node[text=figslate,font=\scriptsize,anchor=west,inner sep=1pt] at ({\ax+8.12*\sc},\yb+0.13) {$B_{\mathrm{top}}=2$};
+%% d3: sits on the boundary
+\draw[cov] ({\ax+6*\sc},\yc+0.11) -- ({\ax+7*\sc},\yc+0.11);
+\node[mdot] at ({\ax+6*\sc},\yc) {};
+\node[sdot] at ({\ax+7*\sc},\yc) {};
+%% d4: prediction off scale
+\draw[cov] (0.78,\yd) -- (1.02,\yd);
+\draw[cov] (1.16,\yd) -- ({\ax+1*\sc},\yd);
+\draw[line width=0.45pt,figslate] (1.05,\yd-0.07) -- (1.11,\yd+0.07);
+\draw[line width=0.45pt,figslate] (1.09,\yd-0.07) -- (1.15,\yd+0.07);
+\node[mdot] at (0.78,\yd) {};
+\node[sdot] at ({\ax+1*\sc},\yd) {};
+\node[font=\scriptsize,text=figslate,anchor=north,inner sep=1pt] at (0.78,\yd-0.06) {$-100$};
+\node[text=figslate,font=\scriptsize,anchor=west,inner sep=1pt] at ({\ax+1*\sc+0.06},\yd) {$B_{\mathrm{all}}=101$};
+%% legend
+\draw[rs] (\ax,0.16) -- ({\ax+0.42},0.16);
+\node[font=\scriptsize,anchor=west,inner sep=1pt,text=figink] at ({\ax+0.48},0.16) {rank-sufficient};
+\draw[cov] ({\ax+2.55},0.16) -- ({\ax+2.97},0.16);
+\node[font=\scriptsize,anchor=west,inner sep=1pt,text=figink] at ({\ax+3.03},0.16) {score coverage};
+\end{tikzpicture}

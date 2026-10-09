@@ -1,0 +1,38 @@
+{
+ "N": 100,
+ "domains": {
+  "hotpotqa": {
+   "backend": "bm25s",
+   "files": {
+    "data/fresh/candidates/hotpotqa/docstore.jsonl": "e49ce9292c6905be9d87ef09aa5ec34556b976c8d0262735a02fb1e23784c2f2",
+    "data/fresh/candidates/hotpotqa/fresh.jsonl": "aa4e207ce4077f512fe7ebbbac980cb9df777a28aaee94beeb6f48046a5f3729"
+   },
+   "n_docstore": 176289,
+   "n_queries": 2000,
+   "queries_with_fewer_than_N": 0,
+   "seconds": 253.4
+  },
+  "msmarco": {
+   "backend": "bm25s",
+   "files": {
+    "data/fresh/candidates/msmarco/docstore.jsonl": "69caa222c1c174adb6c0915e53eb56978bc019278e800597fc88c9755c895c30",
+    "data/fresh/candidates/msmarco/fresh.jsonl": "aed8ed637fba3bd89d9e573537b6e0b77c88b204703801e41af7bd279e486ba3"
+   },
+   "n_docstore": 186401,
+   "n_queries": 2000,
+   "queries_with_fewer_than_N": 0,
+   "seconds": 414.9
+  },
+  "nq": {
+   "backend": "bm25s",
+   "files": {
+    "data/fresh/candidates/nq/docstore.jsonl": "b1286bcb390133022dfef9a73d99c2e9f7a09ca32c0aa0ba87301225aea35f93",
+    "data/fresh/candidates/nq/fresh.jsonl": "7592166387eef076e370b26e965c1cd5a6df7eacfb6f9b05c9a5f616b3e8cea3"
+   },
+   "n_docstore": 164600,
+   "n_queries": 2000,
+   "queries_with_fewer_than_N": 0,
+   "seconds": 164.3
+  }
+ }
+}

@@ -1,0 +1,392 @@
+{
+ "bge-m3/hotpotqa": {
+  "all_subset_witness_risk": {
+   "env13": 0.041628122109158186,
+   "rsc": 0.036632747456059205,
+   "traj_mu": 0.0549491211840888
+  },
+  "all_subset_witness_risk_at_grid": 0.036632747456059205,
+  "alpha": 0.05,
+  "cal_frac_H_above_cstar": 0.0025,
+  "cal_frac_grid_below_A": 0.0025,
+  "delta_cfg": 0.008333333333333333,
+  "deployed": {
+   "grid": {
+    "calls": 69.8049953746531,
+    "risk": 0.025901942645698426
+   },
+   "rsc": {
+    "calls": 69.8049953746531,
+    "risk": 0.025901942645698426
+   },
+   "rsc_minus_grid_calls": {
+    "lcb": 0.0,
+    "mean": 0.0,
+    "ucb": 0.0
+   }
+  },
+  "domain": "hotpotqa",
+  "grid": [
+   16,
+   24,
+   32,
+   40,
+   48,
+   56,
+   64,
+   72,
+   80,
+   88,
+   96,
+   100
+  ],
+  "grid_below_A_iff_H_above_cstar": false,
+  "grid_witness_risk": {
+   "env13": 0.041628122109158186,
+   "grid": 0.036632747456059205,
+   "rsc": 0.036632747456059205,
+   "traj_mu": 0.0549491211840888
+  },
+  "identity_max_abs_diff": 0.0,
+  "k": 10,
+  "lambda": {
+   "env13": 3.201575960036734,
+   "grid": 3.2669581825129934,
+   "rsc": 3.2669581825129934,
+   "traj_mu": 3.045934561842467
+  },
+  "last_checkpoint_below_N": 96,
+  "n_cal": 2000,
+  "n_test": 5405,
+  "orders_at_grid_threshold": {},
+  "regime": "finite",
+  "teacher": "bge-m3",
+  "test_frac_H_above_cstar": 0.0012950971322849213,
+  "test_frac_grid_below_A": 0.0009250693802035153
+ },
+ "bge-m3/msmarco": {
+  "all_subset_witness_risk": {
+   "env13": 0.048594377510040164,
+   "rsc": 0.04538152610441767,
+   "traj_mu": 0.05883534136546185
+  },
+  "all_subset_witness_risk_at_grid": 0.04538152610441767,
+  "alpha": 0.05,
+  "cal_frac_H_above_cstar": 0.0005,
+  "cal_frac_grid_below_A": 0.0,
+  "delta_cfg": 0.008333333333333333,
+  "deployed": {
+   "grid": {
+    "calls": 47.0,
+    "risk": 0.032329317269076306
+   },
+   "rsc": {
+    "calls": 47.0,
+    "risk": 0.032329317269076306
+   },
+   "rsc_minus_grid_calls": {
+    "lcb": 0.0,
+    "mean": 0.0,
+    "ucb": 0.0
+   }
+  },
+  "domain": "msmarco",
+  "grid": [
+   16,
+   24,
+   32,
+   40,
+   48,
+   56,
+   64,
+   72,
+   80,
+   88,
+   96,
+   100
+  ],
+  "grid_below_A_iff_H_above_cstar": false,
+  "grid_witness_risk": {
+   "env13": 0.048594377510040164,
+   "grid": 0.04538152610441767,
+   "rsc": 0.04538152610441767,
+   "traj_mu": 0.05883534136546185
+  },
+  "identity_max_abs_diff": 0.0,
+  "k": 10,
+  "lambda": {
+   "env13": 3.6846088126713705,
+   "grid": 3.752796736517267,
+   "rsc": 3.752796736517267,
+   "traj_mu": 3.42939698775244
+  },
+  "last_checkpoint_below_N": 96,
+  "n_cal": 2000,
+  "n_test": 4980,
+  "orders_at_grid_threshold": {},
+  "regime": "finite",
+  "teacher": "bge-m3",
+  "test_frac_H_above_cstar": 0.0012048192771084338,
+  "test_frac_grid_below_A": 0.001004016064257028
+ },
+ "bge-m3/nq": {
+  "all_subset_witness_risk": {
+   "env13": 0.0232463295269168,
+   "rsc": 0.02202283849918434,
+   "traj_mu": 0.039559543230016314
+  },
+  "all_subset_witness_risk_at_grid": 0.02202283849918434,
+  "alpha": 0.05,
+  "cal_frac_H_above_cstar": 0.0,
+  "cal_frac_grid_below_A": 0.0,
+  "delta_cfg": 0.008333333333333333,
+  "deployed": {
+   "grid": {
+    "calls": 58.44535073409462,
+    "risk": 0.014274061990212071
+   },
+   "rsc": {
+    "calls": 58.44535073409462,
+    "risk": 0.014274061990212071
+   },
+   "rsc_minus_grid_calls": {
+    "lcb": 0.0,
+    "mean": 0.0,
+    "ucb": 0.0
+   }
+  },
+  "domain": "nq",
+  "grid": [
+   16,
+   24,
+   32,
+   40,
+   48,
+   56,
+   64,
+   72,
+   80,
+   88,
+   96,
+   100
+  ],
+  "grid_below_A_iff_H_above_cstar": true,
+  "grid_witness_risk": {
+   "env13": 0.0232463295269168,
+   "grid": 0.02202283849918434,
+   "rsc": 0.02202283849918434,
+   "traj_mu": 0.039559543230016314
+  },
+  "identity_max_abs_diff": 0.0,
+  "k": 10,
+  "lambda": {
+   "env13": 3.430329405944497,
+   "grid": 3.4825529717442962,
+   "rsc": 3.4825529717442962,
+   "traj_mu": 3.0970891537536116
+  },
+  "last_checkpoint_below_N": 96,
+  "n_cal": 1000,
+  "n_test": 2452,
+  "orders_at_grid_threshold": {},
+  "regime": "finite",
+  "teacher": "bge-m3",
+  "test_frac_H_above_cstar": 0.0,
+  "test_frac_grid_below_A": 0.0
+ },
+ "qwen3-4b/hotpotqa": {
+  "all_subset_witness_risk": {
+   "env13": 0.03996299722479186,
+   "rsc": 0.03570767807585569,
+   "traj_mu": 0.0484736355226642
+  },
+  "all_subset_witness_risk_at_grid": 0.03570767807585569,
+  "alpha": 0.05,
+  "cal_frac_H_above_cstar": 0.008,
+  "cal_frac_grid_below_A": 0.0065,
+  "delta_cfg": 0.008333333333333333,
+  "deployed": {
+   "grid": {
+    "calls": 86.86105457909343,
+    "risk": 0.027012025901942644
+   },
+   "rsc": {
+    "calls": 86.86105457909343,
+    "risk": 0.027012025901942644
+   },
+   "rsc_minus_grid_calls": {
+    "lcb": 0.0,
+    "mean": 0.0,
+    "ucb": 0.0
+   }
+  },
+  "domain": "hotpotqa",
+  "grid": [
+   16,
+   24,
+   32,
+   40,
+   48,
+   56,
+   64,
+   72,
+   80,
+   88,
+   96,
+   100
+  ],
+  "grid_below_A_iff_H_above_cstar": false,
+  "grid_witness_risk": {
+   "env13": 0.03940795559666975,
+   "grid": 0.03515263644773358,
+   "rsc": 0.03515263644773358,
+   "traj_mu": 0.04791859389454209
+  },
+  "identity_max_abs_diff": 0.0,
+  "k": 10,
+  "lambda": {
+   "env13": 2.082086089651959,
+   "grid": 2.1187686959253793,
+   "rsc": 2.1187686959253793,
+   "traj_mu": 2.012271978314392
+  },
+  "last_checkpoint_below_N": 96,
+  "n_cal": 2000,
+  "n_test": 5405,
+  "orders_at_grid_threshold": {},
+  "regime": "finite",
+  "teacher": "qwen3-4b",
+  "test_frac_H_above_cstar": 0.009805735430157262,
+  "test_frac_grid_below_A": 0.0072155411655874194
+ },
+ "qwen3-4b/msmarco": {
+  "all_subset_witness_risk": {
+   "env13": 0.04076305220883534,
+   "rsc": 0.03634538152610442,
+   "traj_mu": 0.05080321285140562
+  },
+  "all_subset_witness_risk_at_grid": 0.03634538152610442,
+  "alpha": 0.05,
+  "cal_frac_H_above_cstar": 0.0005,
+  "cal_frac_grid_below_A": 0.0005,
+  "delta_cfg": 0.008333333333333333,
+  "deployed": {
+   "grid": {
+    "calls": 59.03132530120482,
+    "risk": 0.026305220883534135
+   },
+   "rsc": {
+    "calls": 59.03132530120482,
+    "risk": 0.026305220883534135
+   },
+   "rsc_minus_grid_calls": {
+    "lcb": 0.0,
+    "mean": 0.0,
+    "ucb": 0.0
+   }
+  },
+  "domain": "msmarco",
+  "grid": [
+   16,
+   24,
+   32,
+   40,
+   48,
+   56,
+   64,
+   72,
+   80,
+   88,
+   96,
+   100
+  ],
+  "grid_below_A_iff_H_above_cstar": false,
+  "grid_witness_risk": {
+   "env13": 0.040562248995983936,
+   "grid": 0.03634538152610442,
+   "rsc": 0.03634538152610442,
+   "traj_mu": 0.05060240963855422
+  },
+  "identity_max_abs_diff": 0.0,
+  "k": 10,
+  "lambda": {
+   "env13": 2.917461034117049,
+   "grid": 2.9934796021904932,
+   "rsc": 2.9934796021904932,
+   "traj_mu": 2.7605830730702325
+  },
+  "last_checkpoint_below_N": 96,
+  "n_cal": 2000,
+  "n_test": 4980,
+  "orders_at_grid_threshold": {},
+  "regime": "finite",
+  "teacher": "qwen3-4b",
+  "test_frac_H_above_cstar": 0.0018072289156626507,
+  "test_frac_grid_below_A": 0.0014056224899598394
+ },
+ "qwen3-4b/nq": {
+  "all_subset_witness_risk": {
+   "env13": 0.044861337683523655,
+   "rsc": 0.040783034257748776,
+   "traj_mu": 0.053833605220228384
+  },
+  "all_subset_witness_risk_at_grid": 0.040783034257748776,
+  "alpha": 0.05,
+  "cal_frac_H_above_cstar": 0.002,
+  "cal_frac_grid_below_A": 0.002,
+  "delta_cfg": 0.008333333333333333,
+  "deployed": {
+   "grid": {
+    "calls": 66.38988580750407,
+    "risk": 0.03099510603588907
+   },
+   "rsc": {
+    "calls": 66.38988580750407,
+    "risk": 0.03099510603588907
+   },
+   "rsc_minus_grid_calls": {
+    "lcb": 0.0,
+    "mean": 0.0,
+    "ucb": 0.0
+   }
+  },
+  "domain": "nq",
+  "grid": [
+   16,
+   24,
+   32,
+   40,
+   48,
+   56,
+   64,
+   72,
+   80,
+   88,
+   96,
+   100
+  ],
+  "grid_below_A_iff_H_above_cstar": true,
+  "grid_witness_risk": {
+   "env13": 0.044861337683523655,
+   "grid": 0.040783034257748776,
+   "rsc": 0.040783034257748776,
+   "traj_mu": 0.053833605220228384
+  },
+  "identity_max_abs_diff": 0.0,
+  "k": 10,
+  "lambda": {
+   "env13": 2.556742322220797,
+   "grid": 2.6033668055988435,
+   "rsc": 2.6033668055988435,
+   "traj_mu": 2.4711249888132736
+  },
+  "last_checkpoint_below_N": 96,
+  "n_cal": 1000,
+  "n_test": 2452,
+  "orders_at_grid_threshold": {},
+  "regime": "finite",
+  "teacher": "qwen3-4b",
+  "test_frac_H_above_cstar": 0.0028548123980424145,
+  "test_frac_grid_below_A": 0.0028548123980424145
+ }
+}

@@ -1,0 +1,91 @@
+{
+ "bit_stable": true,
+ "cache_settings": {
+  "hotpotqa": {
+   "attn": null,
+   "batch_size": 32,
+   "class": "BGERerankerScorer",
+   "dtype": "float16",
+   "max_length": 512,
+   "max_tokens_per_batch": 65536,
+   "mode": "canonical",
+   "name": "BAAI/bge-reranker-v2-m3",
+   "query_max_length": 384
+  },
+  "msmarco": {
+   "attn": null,
+   "batch_size": 32,
+   "class": "BGERerankerScorer",
+   "dtype": "float16",
+   "max_length": 512,
+   "max_tokens_per_batch": 65536,
+   "mode": "canonical",
+   "name": "BAAI/bge-reranker-v2-m3",
+   "query_max_length": 384
+  },
+  "nq": {
+   "attn": null,
+   "batch_size": 32,
+   "class": "BGERerankerScorer",
+   "dtype": "float16",
+   "max_length": 512,
+   "max_tokens_per_batch": 65536,
+   "mode": "canonical",
+   "name": "BAAI/bge-reranker-v2-m3",
+   "query_max_length": 384
+  }
+ },
+ "compositions": {
+  "cross_query_shuffled": {
+   "bit_identical_pairs": 1000,
+   "k": 10,
+   "max_abs_diff": 0.0,
+   "mean_abs_diff": 0.0,
+   "pairs": 1000,
+   "queries": 10,
+   "topk_order_changed_queries": 0
+  },
+  "per_query_reversed": {
+   "bit_identical_pairs": 1000,
+   "k": 10,
+   "max_abs_diff": 0.0,
+   "mean_abs_diff": 0.0,
+   "pairs": 1000,
+   "queries": 10,
+   "topk_order_changed_queries": 0
+  },
+  "single_pair_max_abs_diff": 0.0
+ },
+ "k": 10,
+ "max_abs_diff": 0.0,
+ "mean_abs_diff": 0.0,
+ "mode": "canonical",
+ "ok": true,
+ "pairs_checked": 2040,
+ "queries_checked": 10,
+ "settings": {
+  "attn": null,
+  "batch_size": 32,
+  "canonical_multiple": 64,
+  "class": "BGERerankerScorer",
+  "cuda": "13.0",
+  "device": "cuda",
+  "dtype": "float16",
+  "fast_pad_multiple": 8,
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "max_length": 512,
+  "max_tokens_per_batch": 65536,
+  "mode": "canonical",
+  "model_id": "BAAI/bge-reranker-v2-m3",
+  "name": "BAAI/bge-reranker-v2-m3",
+  "padding_side": "right",
+  "query_max_length": 384,
+  "score": "raw logit (fp32 classification head)",
+  "torch": "2.14.0+cu130",
+  "transformers": "5.17.0",
+  "truncation": "query<=3/4*max_length, only_second"
+ },
+ "settings_match_cache": true,
+ "teacher": "bge-m3",
+ "topk_order_changed_queries": 0
+}

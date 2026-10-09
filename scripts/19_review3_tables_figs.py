@@ -22,7 +22,7 @@ from _common import ROOT, base_parser, load_config, log, main_domains, teachers 
 
 from rscrank.io import ensure_dir, read_json  # noqa: E402
 
-TSHORT = {"qwen3-4b": "Qwen3-4B", "bge-m3": "BGE-m3"}
+TSHORT = {"qwen3-4b": "Qwen3-4B", "bge-m3": "bge-m3"}
 DSHORT = {"nq": "NQ", "hotpotqa": "HotpotQA", "msmarco": "MS MARCO"}
 ORDERS = ["mu", "cheap_raw", "observed_regression", "alternating_bm25", "mu_alt", "mu_binned_length", "bm25", "length_asc", "length_desc", "random"]
 ORDER_LABELS = {"mu": r"$\mu$ (deployed)", "cheap_raw": "raw cheap score", "observed_regression": "refit on observed scores",
@@ -58,23 +58,26 @@ def main_table(keys, stats, r3, primary):
             cells = [f"{a} & {b}" for a, b in cells]
         L.append(f"{label} & {cover} & " + " & ".join(cells) + " \\\\")
 
+    def cell(k, stat_risk, stat_calls, r3_risk, r3_calls):
+        if "headline" in r3[k]:
+            return f(r3_risk(k), 3), f(r3_calls(k), 1)
+        return f(stat_risk(k), 3), f(stat_calls(k), 1)
+
+    cover13 = "13 named" if any("headline" in r3[k] for k in keys) else "replay"
     row("Full teacher", "--", [("0", f(stats[k]["calls"]["full_mean"], 0)) for k in keys])
     L.append(f"\\multicolumn{{{2 + 2 * n}}}{{@{{}}l}}{{\\emph{{Guardrail certificate, $\\lambda$ calibrated on}}}} \\\\")
-    row("\\quad one trajectory ($A^{\\mu}_{k,1}$)", "1 trajectory", [(f(stats[k]["calls"]["traj"]["risk"], 3), f(stats[k]["calls"]["traj"]["mean"], 1)) for k in keys])
-    row("\\quad 13 tested policies (envelope)", "13 tested", [(f(r3[k]["per_order"]["mu"]["env_all13"]["risk"], 3), f(r3[k]["calls_under_mu"]["env_all13"], 1)) for k in keys])
-    row("\\quad all subsets ($A_{k,1}$): \\method{}", "every policy", [(f(stats[k]["risk"][primary]["rate"], 3), f(stats[k]["calls"]["rsc_mean"], 1)) for k in keys], bold=True)
-    row("\\quad winner scores ($B_{\\mathrm{top}}$)", "every policy", [(f(stats[k]["calls"]["btop"]["risk"], 3), f(stats[k]["calls"]["btop"]["mean"], 1)) for k in keys])
-    row("\\quad all scores ($B_{\\mathrm{all}}$)", "every policy", [(f(stats[k]["calls"]["ball"]["risk"], 3), f(stats[k]["calls"]["ball"]["mean"], 1)) for k in keys])
-    bon = []
-    for k in keys:
-        b = r3[k]["bonferroni"]["all13"]
-        bon.append(("0" if b["lambda_mu_is_inf"] else "--", f(b["calls_mu"], 1)))
-    row("\\quad 13 thresholds at $(\\alpha,\\delta)/13$", "13 tested", bon)
+    row("\\quad one trajectory ($A^{\\mu}_{k,1}$)", "one trajectory", [cell(k, lambda k: stats[k]["calls"]["traj"]["risk"], lambda k: stats[k]["calls"]["traj"]["mean"], lambda k: r3[k]["per_order"]["mu"]["traj"]["risk"], lambda k: r3[k]["calls_under_mu"]["traj_mu"]) for k in keys])
+    row("\\quad 13 named policies (envelope)", cover13, [cell(k, lambda k: r3[k]["per_order"]["mu"]["env_all13"]["risk"], lambda k: r3[k]["calls_under_mu"]["env_all13"], lambda k: r3[k]["per_order"]["mu"]["env_all13"]["risk"], lambda k: r3[k]["calls_under_mu"]["env_all13"]) for k in keys])
+    row("\\quad all subsets ($A_{k,1}$): \\method{}", "every policy", [cell(k, lambda k: stats[k]["risk"][primary]["rate"], lambda k: stats[k]["calls"]["rsc_mean"], lambda k: r3[k]["headline"]["rsc"]["risk"], lambda k: r3[k]["headline"]["rsc"]["calls"]) for k in keys], bold=True)
+    row("\\quad winner scores ($B_{\\mathrm{top}}$)", "every policy", [cell(k, lambda k: stats[k]["calls"]["btop"]["risk"], lambda k: stats[k]["calls"]["btop"]["mean"], lambda k: r3[k]["headline"]["btop"]["risk"], lambda k: r3[k]["headline"]["btop"]["calls"]) for k in keys])
+    row("\\quad all scores ($B_{\\mathrm{all}}$)", "every policy", [cell(k, lambda k: stats[k]["calls"]["ball"]["risk"], lambda k: stats[k]["calls"]["ball"]["mean"], lambda k: r3[k]["headline"]["ball"]["risk"], lambda k: r3[k]["headline"]["ball"]["calls"]) for k in keys])
+    # thirteen separate critical values at (alpha, delta)/13 are +inf on every configuration (stated in the caption)
+    assert all(r3[k]["bonferroni"]["all13"]["lambda_mu_is_inf"] for k in keys if "bonferroni" in r3[k])
     L.append(f"\\multicolumn{{{2 + 2 * n}}}{{@{{}}l}}{{\\emph{{Committed set: calibrated $\\mu$-prefix $S(q)$, stop once it is scored}}}} \\\\")
-    row("\\quad adaptive $m(q)$, at once", "every order", [(f(stats[k]["calls"]["adaptive_prefix"]["risk"], 3), f(stats[k]["calls"]["adaptive_prefix"]["mean"], 1)) for k in keys])
+    row("\\quad adaptive $m(q)$, at once", "every order", [cell(k, lambda k: stats[k]["calls"]["adaptive_prefix"]["risk"], lambda k: stats[k]["calls"]["adaptive_prefix"]["mean"], lambda k: r3[k]["headline"]["adaptive_once"]["risk"], lambda k: r3[k]["headline"]["adaptive_once"]["calls"]) for k in keys])
     row("\\quad adaptive $m(q)$, $16/8$ rounds", "every policy", [(f(r3[k]["per_order"]["mu"]["sc_adaptive"]["risk"], 3), f(r3[k]["per_order"]["mu"]["sc_adaptive"]["calls_mean"], 1)) for k in keys])
-    row("\\quad uniform $m$, at once", "every order", [(f(stats[k]["calls"]["uniform_prefix"]["risk"], 3), f(stats[k]["calls"]["uniform_prefix"]["mean"], 1)) for k in keys])
-    row("Learned budget (dev-tuned)", "none", [(f(stats[k]["calls"]["learned_budget"]["risk"], 3), f(stats[k]["calls"]["learned_budget"]["mean"], 1)) for k in keys])
+    row("\\quad uniform $m$, at once", "every order", [cell(k, lambda k: stats[k]["calls"]["uniform_prefix"]["risk"], lambda k: stats[k]["calls"]["uniform_prefix"]["mean"], lambda k: r3[k]["headline"]["uniform_once"]["risk"], lambda k: r3[k]["headline"]["uniform_once"]["calls"]) for k in keys])
+    row("Learned budget (dev-tuned)", "none", [cell(k, lambda k: stats[k]["calls"]["learned_budget"]["risk"], lambda k: stats[k]["calls"]["learned_budget"]["mean"], lambda k: r3[k]["headline"]["learned"]["risk"], lambda k: r3[k]["headline"]["learned"]["calls"]) for k in keys])
     L.append("\\midrule")
 
     def mc(x):
@@ -83,15 +86,32 @@ def main_table(keys, stats, r3, primary):
     def iv(pd):
         return f"{signed(pd['mean'])} [{signed(pd['lcb'])},\\,{signed(pd['ucb'])}]"
 
-    L.append("\\method{} risk: CP $95\\%$ upper end & & " + " & ".join(mc(f(stats[k]["risk"][primary]["cp_hi"], 3)) for k in keys) + " \\\\")
-    L.append("$\\Delta$calls, adaptive $-$ \\method{} [$95\\%$] & & " + " & ".join(mc(iv(stats[k]["calls"]["adaptive_prefix"]["paired_diff_vs_rsc"])) for k in keys) + " \\\\")
-    L.append("early stops\\,/\\,error given early stop & & " + " & ".join(mc(f"{f(stats[k]['conditional']['early_fraction'], 2)} / {f(stats[k]['conditional']['error_given_early'], 3)}") for k in keys) + " \\\\")
-    L.append("nDCG@10 full teacher\\,/\\,\\method{} & & " + " & ".join(mc(f"{f(stats[k]['ndcg']['full'], 3)} / {f(stats[k]['ndcg']['rsc'], 3)}") for k in keys) + " \\\\")
+    def cp_hi(k):
+        return r3[k]["headline"]["rsc"]["cp_hi"] if "headline" in r3[k] else stats[k]["risk"][primary]["cp_hi"]
+
+    def paired(k):
+        return r3[k]["headline"]["adaptive_once"]["paired_diff_vs_rsc"] if "headline" in r3[k] else stats[k]["calls"]["adaptive_prefix"]["paired_diff_vs_rsc"]
+
+    def early(k):
+        if "headline" in r3[k]:
+            h = r3[k]["headline"]["rsc"]
+            return h["early_fraction"], h["error_given_early"]
+        return stats[k]["conditional"]["early_fraction"], stats[k]["conditional"]["error_given_early"]
+
+    def nd(k):
+        if "headline" in r3[k]:
+            h = r3[k]["headline"]["ndcg"]
+            return h["full"], h["rsc"], h["lcb"]
+        return stats[k]["ndcg"]["full"], stats[k]["ndcg"]["rsc"], stats[k]["ndcg"]["noninferiority"]["lcb"]
+
+    L.append("\\method{} risk: CP $95\\%$ upper end & & " + " & ".join(mc(f(cp_hi(k), 3)) for k in keys) + " \\\\")
+    L.append("$\\Delta$calls, adaptive $-$ \\method{} [$95\\%$] & & " + " & ".join(mc(iv(paired(k))) for k in keys) + " \\\\")
+    L.append("early stops\\,/\\,error given early stop & & " + " & ".join(mc(f"{f(early(k)[0], 2)} / {f(early(k)[1], 3)}") for k in keys) + " \\\\")
 
     def lcb(x):
         return ("$-$" if x < 0 else "") + f"{abs(x):.4f}"
 
-    L.append("$\\Delta$nDCG@10, $97.5\\%$ lower bound & & " + " & ".join(mc(lcb(stats[k]["ndcg"]["noninferiority"]["lcb"])) for k in keys) + " \\\\")
+    L.append("$\\Delta$nDCG@10, $97.5\\%$ lower bound & & " + " & ".join(mc(lcb(nd(k)[2])) for k in keys) + " \\\\")
     L += ["\\bottomrule", "\\end{tabular}"]
     return "\n".join(L) + "\n"
 
@@ -102,7 +122,12 @@ def anatomy_table(keys, stats, r3):
           " & " + " & ".join(f"\\multicolumn{{3}}{{c}}{{{TSHORT[t]}}}" for t in ("qwen3-4b", "bge-m3")) + " \\\\",
           "\\cmidrule(lr){2-4}\\cmidrule(lr){5-7}",
           " & " + " & ".join(DSHORT[k.split("/")[1]] for k in keys) + " \\\\", "\\midrule"]
-    E9 = {k: stats[k]["E9"] for k in keys}
+    E9 = {}
+    for k in keys:
+        if "headline" in r3[k]:
+            E9[k] = r3[k]["headline"]["anatomy"]
+        else:
+            E9[k] = stats[k]["E9"]
     L.append("\\method{} calls & " + " & ".join(f(E9[k]["calls_mean"], 1) for k in keys) + " \\\\")
     L.append("\\quad core $|V^\\star|$ & " + " & ".join(f(E9[k]["cert_core_mean"], 1) for k in keys) + " \\\\")
     L.append("\\quad band $\\beta$ & " + " & ".join(f(E9[k]["band_mean"], 2) for k in keys) + " \\\\")
@@ -134,14 +159,14 @@ def throughput_table(keys, passes_by_key):
 
 
 def orders_table(keys, r3):
-    L = header("calls (risk) under every order: RSC / set completion / 13-policy envelope / transferred trajectory threshold")
+    L = header("calls under every order: RSC / set completion of the adaptive prefix")
     L += ["\\begin{tabular}{@{}l" + "c" * len(keys) + "@{}}", "\\toprule",
           "Order & " + " & ".join(f"{TSHORT[k.split('/')[0]]}/{DSHORT[k.split('/')[1]]}" for k in keys) + " \\\\", "\\midrule"]
     for o in ORDERS:
         cells = []
         for k in keys:
             po = r3[k]["per_order"][o]
-            cells.append(" / ".join(f(po[m]["calls_mean"], 1) for m in ("rsc", "sc_adaptive", "env_all13", "traj")))
+            cells.append(" / ".join(f(po[m]["calls_mean"], 1) for m in ("rsc", "sc_adaptive")))
         L.append(f"{ORDER_LABELS[o]} & " + " & ".join(cells) + " \\\\")
     L.append("\\midrule")
     for name, lab in (("rsc", "union of failures, \\method{}"), ("sc_adaptive", "union of failures, set completion"), ("traj", "union of failures, trajectory")):
@@ -156,6 +181,7 @@ def orders_figure(keys, r3, path: Path):
     matplotlib.use("pgf")
     import matplotlib.pyplot as plt
     from matplotlib.lines import Line2D
+    from matplotlib.transforms import blended_transform_factory
 
     plt.rcParams.update({"pgf.texsystem": "pdflatex", "pgf.rcfonts": False, "font.family": "serif", "text.usetex": True,
                          "pgf.preamble": r"\usepackage[T1]{fontenc}\usepackage{libertine}\usepackage[libertine]{newtxmath}",
@@ -180,6 +206,7 @@ def orders_figure(keys, r3, path: Path):
     axr.set_yticks(y)
     axr.set_yticklabels([ORDER_LABELS[o] for o in ORDERS])
     for ax in (axr, axc):
+        ax.axhspan(y[0] - 0.48, y[0] + 0.48, color="#E5F3F2", zorder=0, lw=0)
         ax.axhline(y[4] - 0.5, color="#9CA3AF", lw=0.5, ls=(0, (1, 1.5)))
         ax.grid(axis="x", color=COL["grid"], lw=0.4)
         ax.set_axisbelow(True)
@@ -196,16 +223,22 @@ def orders_figure(keys, r3, path: Path):
             axc.plot([lo, hi], [yi + off] * 2, color=COL[c], lw=1.6, solid_capstyle="round", alpha=0.85)
             axc.plot([mean], [yi + off], marker="o", ms=2.6, color=COL[c], mec="white", mew=0.35)
     axc.axvline(0, color=COL["rsc"], lw=1.0)
-    axc.set_xlim(-5.2, 5.2)
-    axc.set_xticks([-4, -2, 0, 2, 4])
-    axc.set_xticklabels(["$-4$", "$-2$", "0", "$+2$", "$+4$"])
+    # no paired interval may be clipped at the panel edge
+    lim = 6.6
+    assert all(abs(d) <= lim for o in ORDERS for m, _, _ in diff_methods for k in keys
+               for d in (r3[k]["per_order"][o][f"diff_{m}_minus_rsc"]["lcb"], r3[k]["per_order"][o][f"diff_{m}_minus_rsc"]["ucb"]))
+    axc.set_xlim(-lim, lim)
+    axc.set_xticks([-6, -4, -2, 0, 2, 4, 6])
+    axc.set_xticklabels(["$-6$", "$-4$", "$-2$", "0", "$+2$", "$+4$", "$+6$"])
     axc.set_xlabel(r"(b) teacher calls minus \textsc{RSC-Rank}'s on the same queries (paired 95\% intervals)")
     rsc_calls = [np.mean([r3[k]["per_order"][o]["rsc"]["calls_mean"] for k in keys]) for o in ORDERS]
+    margin = blended_transform_factory(axc.transAxes, axc.transData)
     for yi, rc in zip(y, rsc_calls):
-        axc.text(5.15, yi, f"{rc:.0f}", fontsize=6.6, color=COL["rsc"], ha="right", va="center")
-    axc.text(5.15, top - 0.12, r"\textsc{RSC} calls", fontsize=6.6, color=COL["rsc"], ha="right", va="center")
-    axc.text(-5.0, top - 0.12, r"$\leftarrow$ fewer calls", fontsize=6.6, color="#6B7280", ha="left", va="center")
-    axc.text(3.55, top - 0.12, r"more $\rightarrow$", fontsize=6.6, color="#6B7280", ha="right", va="center")
+        axc.text(1.05, yi, f"{rc:.0f}", fontsize=6.6, color=COL["rsc"], ha="center", va="center", transform=margin, clip_on=False)
+    axc.text(1.05, top + 0.12, r"\textsc{RSC}", fontsize=6.6, color=COL["rsc"], ha="center", va="bottom", transform=margin, clip_on=False)
+    axc.text(1.05, top - 0.36, "calls", fontsize=6.6, color=COL["rsc"], ha="center", va="bottom", transform=margin, clip_on=False)
+    axc.text(-lim + 0.2, top - 0.12, r"$\leftarrow$ fewer calls", fontsize=6.6, color="#6B7280", ha="left", va="center")
+    axc.text(lim - 0.2, top - 0.12, r"more $\rightarrow$", fontsize=6.6, color="#6B7280", ha="right", va="center")
     handles = [Line2D([0], [0], color=COL[c], lw=1.6, marker="o", ms=2.6, mec="white", mew=0.35) for _, c, _, _ in risk_methods]
     fig.legend(handles, [lab for _, _, lab, _ in risk_methods], loc="upper center", ncol=4, frameon=False, bbox_to_anchor=(0.56, 1.045), handlelength=1.6, columnspacing=1.4)
     fig.savefig(path, bbox_inches="tight", pad_inches=0.01)
@@ -229,20 +262,21 @@ def ladder_figure(keys, stats, r3, path: Path):
     fig, ax = plt.subplots(figsize=(3.33, 1.86))
     y = np.arange(len(keys))[::-1].astype(float)
     series = [
-        ("set", "committed set, at once", lambda k: stats[k]["calls"]["adaptive_prefix"]["mean"], dict(marker="D", ms=3.4, mfc="white", mec=COL["sc"], mew=0.9, color=COL["sc"])),
+        ("set", "committed set, at once", lambda k: r3[k]["headline"]["adaptive_once"]["calls"] if "headline" in r3[k] else stats[k]["calls"]["adaptive_prefix"]["mean"], dict(marker="D", ms=3.4, mfc="white", mec=COL["sc"], mew=0.9, color=COL["sc"])),
         ("traj", "one trajectory", lambda k: r3[k]["calls_under_mu"]["traj_mu"], dict(marker="o", ms=3.6, color=COL["traj"], mec="white", mew=0.4)),
-        ("env", "13 tested policies", lambda k: r3[k]["calls_under_mu"]["env_all13"], dict(marker="^", ms=4.0, color=COL["env"], mec="white", mew=0.4)),
+        ("env", "13 named policies", lambda k: r3[k]["calls_under_mu"]["env_all13"], dict(marker="^", ms=4.2, color=COL["env"], mec="white", mew=0.45, zorder=4)),
         ("rsc", r"all subsets: \textsc{RSC-Rank}", lambda k: r3[k]["calls_under_mu"]["rsc"], dict(marker="o", ms=4.6, color=COL["rsc"], mec="white", mew=0.5)),
-        ("btop", r"winner scores ($B_{\mathrm{top}}$)", lambda k: stats[k]["calls"]["btop"]["mean"], dict(marker="s", ms=3.4, color="#7C8596", mec="white", mew=0.4)),
-        ("ball", r"all scores ($B_{\mathrm{all}}$)", lambda k: stats[k]["calls"]["ball"]["mean"], dict(marker="s", ms=3.4, color="#4B5563", mec="white", mew=0.4)),
-        ("bonf", r"13 thresholds at $(\alpha,\delta)/13$", lambda k: r3[k]["bonferroni"]["all13"]["calls_mu"], dict(marker="x", ms=3.8, color=COL["alpha"], mew=0.9)),
+        ("btop", r"winner scores ($B_{\mathrm{top}}$)", lambda k: r3[k]["headline"]["btop"]["calls"] if "headline" in r3[k] else stats[k]["calls"]["btop"]["mean"], dict(marker="s", ms=3.4, color="#7C8596", mec="white", mew=0.4)),
+        ("ball", r"all scores ($B_{\mathrm{all}}$)", lambda k: r3[k]["headline"]["ball"]["calls"] if "headline" in r3[k] else stats[k]["calls"]["ball"]["mean"], dict(marker="s", ms=3.4, color="#4B5563", mec="white", mew=0.4)),
+        ("bonf", r"13 critical values at $(\alpha,\delta)/13$", lambda k: r3[k]["bonferroni"]["all13"]["calls_mu"], dict(marker="x", ms=3.8, color=COL["alpha"], mew=0.9)),
     ]
     for yi, k in zip(y, keys):
         v = {name: fn(k) for name, _, fn, _ in series}
         ax.plot([v["traj"], v["rsc"]], [yi, yi], color=COL["rsc"], lw=2.2, alpha=0.28, solid_capstyle="round", zorder=1)
         ax.plot([v["rsc"], v["ball"]], [yi, yi], color="#9CA3AF", lw=0.6, ls=(0, (1, 1.3)), zorder=1)
         for name, _, _, st in series:
-            ax.plot([v[name]], [yi], ls="none", zorder=3, **st)
+            yy = yi + (0.16 if name == "env" else 0.0)
+            ax.plot([v[name]], [yy], ls="none", zorder=st.get("zorder", 3), **{kk: vv for kk, vv in st.items() if kk != "zorder"})
     ax.set_yticks(y)
     ax.set_yticklabels([f"{TSHORT[k.split('/')[0]]}/{DSHORT[k.split('/')[1]]}" for k in keys])
     ax.set_xlim(40, 102)
@@ -269,7 +303,10 @@ def main() -> int:
     primary = cfg["protocol"].get("primary_regime", "finite")
     keys = [f"{t}/{d}" for t in teachers(cfg) for d in main_domains(cfg)]
     stats = {k: read_json(ROOT / cfg["paths"]["runs"] / "stats" / k.split("/")[0] / f"{k.split('/')[1]}.json") for k in keys}
-    r3 = {k: read_json(ROOT / cfg["paths"]["runs"] / "review3" / k.split("/")[0] / f"{k.split('/')[1]}.json") for k in keys}
+    a8 = ROOT / "runs" / "a8_split"
+    use_a8 = all((a8 / t / f"{d}.json").exists() for t in teachers(cfg) for d in main_domains(cfg))
+    r3_root = a8 if use_a8 else (ROOT / cfg["paths"]["runs"] / "review3")
+    r3 = {k: read_json(r3_root / k.split("/")[0] / f"{k.split('/')[1]}.json") for k in keys}
     tab_dir, fig_dir = ensure_dir(ROOT / "paper" / "tables"), ensure_dir(ROOT / "paper" / "figures")
     (tab_dir / "tab_main_v3.tex").write_text(main_table(keys, stats, r3, primary), encoding="utf-8")
     (tab_dir / "tab_anatomy_v3.tex").write_text(anatomy_table(keys, stats, r3), encoding="utf-8")

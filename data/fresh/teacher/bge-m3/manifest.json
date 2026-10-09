@@ -1,0 +1,34 @@
+{
+ "files": {
+  "data/fresh/teacher/bge-m3/hotpotqa/fresh.npz": {
+   "pairs": 200000,
+   "queries": 2000,
+   "seconds": 116.7,
+   "sha256": "5e86d46340604781f67dd3adb1b228e7ed25c0775842ccdff0b43fdfc22f3a82"
+  },
+  "data/fresh/teacher/bge-m3/msmarco/fresh.npz": {
+   "pairs": 200000,
+   "queries": 2000,
+   "seconds": 98.3,
+   "sha256": "fd762d9bfe89f27d427c3ed19d08b7da9fb31f8d379745b5ef8708edf2916c59"
+  },
+  "data/fresh/teacher/bge-m3/nq/fresh.npz": {
+   "pairs": 200000,
+   "queries": 2000,
+   "seconds": 146.6,
+   "sha256": "acfc3fb103d81d59e31206bbd22bd989be0f2d5c52bc2e0c9f6a0ba92caca143"
+  }
+ },
+ "settings_key": {
+  "attn": null,
+  "batch_size": 32,
+  "class": "BGERerankerScorer",
+  "dtype": "float16",
+  "max_length": 512,
+  "max_tokens_per_batch": 65536,
+  "mode": "canonical",
+  "name": "BAAI/bge-reranker-v2-m3",
+  "query_max_length": 384
+ },
+ "teacher": "bge-m3"
+}

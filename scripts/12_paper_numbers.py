@@ -392,7 +392,8 @@ def main() -> int:
             _mm("BonfTenCalls", "BonfTenCalls", 1, "mean calls of the 10-order Bonferroni scheme at (alpha/10, delta/10) under the mu order")
             _mm("PremiumCalls", "PremiumCalls", 1, "policy-uniform premium (RSC minus mu-trajectory threshold calls, mu order)")
             _mm("BlkTrueAboveFrozenPct", "BlkTrueAboveFrozenPct", 0, "share of test queries on which a frozen blocker trajectory underestimates the controller's critical value (%)")
-            _mm("BlkExposedRoundTwoPct", "BlkExposedRoundTwoPct", 1, "share of test queries on which a re-executed blocker controller errs at the round-2 envelope threshold (%)")
+            if "BlkExposedRoundTwoPct" in A3:
+                _mm("BlkExposedRoundTwoPct", "BlkExposedRoundTwoPct", 1, "share of test queries on which a re-executed blocker controller errs at the round-2 envelope threshold (%)")
             _mm("ScUnion", "ScUnion", 4, "union over the ten orders of the set-completion adaptive prefix failures")
             _mm("RscUnion", "RscUnion", 4, "union over the ten orders of RSC failures (review-3 replay)")
             _mm("ScBaseFail", "ScBaseFail", 4, "fraction of test queries whose calibrated adaptive set misses a winner")

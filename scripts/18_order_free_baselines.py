@@ -89,11 +89,48 @@ def boot(a, b, seed):
     return {"mean": d["mean"], "lcb": d["lcb"], "ucb": d["ucb"]}
 
 
+FROZEN_SPLIT_SEED = 20261006  # declared once, before any metric on this split was computed; not chosen among draws
+
+
+def frozen_family_resplit(cal, test, domain: str, split_dir: Path):
+    """One uniform redraw of the fixed pool (the current calibration set union the test set).
+
+    The policy family is already frozen. The draw is written to disk before any
+    threshold or risk is computed, and a later run reuses that file rather than
+    drawing again.
+    """
+    path = split_dir / f"{domain}.json"
+    pool = sorted(list(cal) + list(test), key=lambda b: str(b.qid))
+    by_qid = {str(b.qid): b for b in pool}
+    if len(by_qid) != len(pool):
+        raise SystemExit(f"{domain}: duplicate qids in the fixed pool")
+    n_cal = len(cal)
+    if path.exists():
+        rec = read_json(path)
+        if rec.get("seed") != FROZEN_SPLIT_SEED or rec.get("n_cal") != n_cal:
+            raise SystemExit(f"{path} was drawn under a different seed or size; refusing to redraw")
+        cal_q, test_q = rec["cal"], rec["test"]
+    else:
+        domain_code = {"nq": 1, "hotpotqa": 2, "msmarco": 3}[domain]
+        rng = np.random.default_rng(np.random.SeedSequence([FROZEN_SPLIT_SEED, domain_code]))
+        perm = rng.permutation(len(pool))
+        cal_q = [str(pool[i].qid) for i in sorted(perm[:n_cal].tolist())]
+        test_q = [str(pool[i].qid) for i in sorted(perm[n_cal:].tolist())]
+        write_json(path, {"seed": FROZEN_SPLIT_SEED, "domain": domain, "n_cal": n_cal, "n_test": len(test_q),
+                          "population": "previous calibration union test; train and development sets untouched",
+                          "drawn_once": True, "cal": cal_q, "test": test_q})
+    if set(cal_q) | set(test_q) != set(by_qid) or set(cal_q) & set(test_q):
+        raise SystemExit(f"{domain}: saved split is not a partition of the fixed pool")
+    return [by_qid[q] for q in cal_q], [by_qid[q] for q in test_q]
+
+
 def main() -> int:
     ap = base_parser("review round 3: set-completion prefixes, declared-family envelopes, Bonferroni at delta/K")
     ap.add_argument("--teacher", default=None)
     ap.add_argument("--domain", default=None)
     ap.add_argument("--limit", type=int, default=0, help="dry run on the first LIMIT calibration and test queries (output under runs/review3_dry)")
+    ap.add_argument("--frozen-family-split", action="store_true",
+                    help="after the policy family is frozen, redraw the fixed pool once (seed 20261006) and recompute")
     args = ap.parse_args()
     cfg = load_config(args)
     pr = cfg["protocol"]
@@ -108,7 +145,12 @@ def main() -> int:
             lams = read_json(ROOT / cfg["paths"]["runs"] / "calib" / teacher / domain / "lambdas.json")
             cal = rep08.load_bundles(cfg, teacher, domain, "cal", k0, lams=lams)
             test = rep08.load_bundles(cfg, teacher, domain, "test", k0, lams=lams)
-            if args.limit:
+            if args.frozen_family_split:
+                if args.limit:
+                    raise SystemExit("the frozen-family split is one draw of the full pool; --limit is not allowed")
+                cal, test = frozen_family_resplit(cal, test, domain, ensure_dir(ROOT / cfg["paths"]["runs"] / "a8_split" / "splits"))
+                log(f"{teacher}/{domain}: frozen-family split seed {FROZEN_SPLIT_SEED}, n_cal {len(cal)}, n_test {len(test)}")
+            elif args.limit:
                 cal, test = cal[: args.limit], test[: args.limit]
             M = len(test)
             lam_rsc = rep08.thr(lams, k0, a0, primary, "A_k1")
@@ -122,7 +164,12 @@ def main() -> int:
             # ---- (2) statistics: A_k1, A^pi for the ten lambda-independent orders, blocker critical values ----------------
             stats = {}
             for split, bundles in (("cal", cal), ("test", test)):
-                st = {"A": np.array([query_statistics(b, k0)["A_k1"] for b in bundles])}
+                rows_q = [query_statistics(b, k0) for b in bundles]
+                st = {"A": np.array([r["A_k1"] for r in rows_q]),
+                      "B_top": np.array([r["B_top"] for r in rows_q], float),
+                      "B_all": np.array([r["B_all"] for r in rows_q], float),
+                      "H_k": np.array([r["H_k"] for r in rows_q], float),
+                      "h_pred": np.array([float(b.features["h_pred"][0]) for b in bundles], float)}
                 for pol in orders:
                     vals = []
                     for b in bundles:
@@ -145,6 +192,17 @@ def main() -> int:
                 stats[split] = st
                 log(f"{teacher}/{domain}/{split}: statistics for {len(orders)} orders + {len(BLOCKERS)} blocker controllers on {len(bundles)} queries")
             assert all(not np.isnan(stats[s_][p]).any() for s_ in stats for p in orders), "mu_alt missing for some queries"
+            if args.frozen_family_split:
+                from rscrank.baselines import calibrate_adaptive_prefix, calibrate_uniform_prefix
+                lam_rsc = calib(stats["cal"]["A"], a0, primary, delta_cfg, M)
+                lam_mu = calib(stats["cal"]["mu"], a0, primary, delta_cfg, M)
+                m_uni = int(min(calibrate_uniform_prefix(stats["cal"]["H_k"], a0, primary, delta=delta_cfg, M=M, N=test[0].N).threshold, test[0].N))
+                t_H = calibrate_adaptive_prefix(stats["cal"]["H_k"], stats["cal"]["h_pred"], a0, primary, delta=delta_cfg, M=M).threshold
+                out["thresholds"] = {"lambda_rsc": lam_rsc, "lambda_mu": lam_mu, "m_uniform": m_uni, "t_H": t_H,
+                                     "calibrated_on": "frozen-family split", "split_seed": FROZEN_SPLIT_SEED}
+                if lam_rsc + 1e-9 < calib(np.maximum.reduce([stats["cal"][m] for m in list(orders) + list(BLOCKERS)]), a0, primary, delta_cfg, M):
+                    raise SystemExit(f"{teacher}/{domain}: envelope threshold exceeds A; the statistics are not aligned")
+                log(f"{teacher}/{domain}: recalibrated on the new split, lambda RSC {lam_rsc:.4f}, trajectory {lam_mu:.4f}")
 
             # check the closed form against the re-executed blocker controller on every test query, at the value
             # itself (must be correct) and just below it (must err, when finite)
@@ -169,7 +227,8 @@ def main() -> int:
                     "realistic6": list(REALISTIC_ORDERS), "realistic9": list(REALISTIC_ORDERS) + list(BLOCKERS)}
             old_env = None
             old_path = ROOT / cfg["paths"]["runs"] / "policy_envelope" / teacher / f"{domain}.json"
-            if old_path.exists():
+            # A threshold from the previous split is not a quantity on this split.
+            if old_path.exists() and not args.frozen_family_split:
                 old_env = read_json(old_path)["thresholds"]["lambda_env"]
             out["thresholds"]["lambda_env_round2"] = old_env
             env = {}
@@ -275,10 +334,47 @@ def main() -> int:
                                      "adaptive_budget_mean": float(m_cov.mean()), "cert_core_mean": float(core_cov.mean()), "rsc_calls_mean": float(rsc_cov.mean()),
                                      "diff_budget_minus_core": boot(m_cov, core_cov, seed), "diff_budget_minus_rsc": boot(m_cov, rsc_cov, seed),
                                      "frac_budget_below_core": float(np.mean(m_cov < core_cov))}
-            od = ensure_dir(ROOT / cfg["paths"]["runs"] / ("review3_dry" if args.limit else "review3") / teacher)
-            write_json(od / f"{domain}.json", out)
             cp = out["covered_paired"]
-            log(f"{teacher}/{domain}: env13 lambda {lam13:.3f} (round-2 {old_env}), calls mu traj {ladder['traj_mu']:.1f} env10 {ladder['env_orders10']:.1f} env13 {ladder['env_all13']:.1f} rsc {ladder['rsc']:.1f} bonf13 {ladder['bonf_all13']:.1f}; replay==stat {env['all13']['replay_equals_stat_per_query']}; covered: budget {cp['adaptive_budget_mean']:.1f} vs core {cp['cert_core_mean']:.1f}")
+            if args.frozen_family_split:
+                from rscrank.stats import conditional_risk, noninferiority, risk_summary
+                meta = read_json(ROOT / "models" / "heads" / teacher / "meta.json")
+
+                def replay_mu(lam_):
+                    return [replay_query(b, MethodSpec("h", "guardrail", lam=lam_, policy="mu", policy_seed=seed, batch_first=bf, batch_rest=br), k0) for b in test]
+
+                lam_top = calib(stats["cal"]["B_top"], a0, primary, delta_cfg, M)
+                lam_all = calib(stats["cal"]["B_all"], a0, primary, delta_cfg, M)
+                rec_rsc, rec_top, rec_all = replay_mu(lam_rsc), replay_mu(lam_top), replay_mu(lam_all)
+                rsc_calls = np.array([r["n_calls"] for r in rec_rsc], float)
+                ad_calls = np.array([m_ad[b.qid] for b in test], float)
+                ad_mis = np.array([float(not set(truth[b.qid]).issubset(set(S_ad[b.qid]))) for b in test])
+                uni_mis = np.array([float(not set(truth[b.qid]).issubset(set(S_uni[b.qid]))) for b in test])
+                rec_learned = [replay_query(b, MethodSpec("hl", "prefix_learned", c=float(meta["learned_budget_c"])), k0) for b in test]
+                nd_rsc = np.array([r["ndcg@k"] for r in rec_rsc], float)
+                nd_full = np.array([r["ndcg_full@k"] for r in rec_rsc], float)
+                ni = noninferiority(nd_rsc, nd_full, epsilon=float(pr["noninferiority_epsilon"]), n_boot=2000, seed=seed)
+                cond = conditional_risk([r["mismatch"] for r in rec_rsc], [r["early_stopped"] for r in rec_rsc])
+                covered_rows = [rows[i] for i in cov]
+                out["headline"] = {
+                    "split_seed": FROZEN_SPLIT_SEED,
+                    "rsc": {"risk": float(np.mean([r["mismatch"] for r in rec_rsc])), "calls": float(rsc_calls.mean()),
+                            "cp_hi": risk_summary([r["mismatch"] for r in rec_rsc])["cp_hi"],
+                            "early_fraction": cond["early_fraction"], "error_given_early": cond["error_given_early"]},
+                    "btop": {"risk": float(np.mean([r["mismatch"] for r in rec_top])), "calls": float(np.mean([r["n_calls"] for r in rec_top]))},
+                    "ball": {"risk": float(np.mean([r["mismatch"] for r in rec_all])), "calls": float(np.mean([r["n_calls"] for r in rec_all]))},
+                    "adaptive_once": {"risk": float(ad_mis.mean()), "calls": float(ad_calls.mean()), "paired_diff_vs_rsc": boot(ad_calls, rsc_calls, seed)},
+                    "uniform_once": {"risk": float(uni_mis.mean()), "calls": float(m_uni)},
+                    "learned": {"risk": float(np.mean([r["mismatch"] for r in rec_learned])), "calls": float(np.mean([r["n_calls"] for r in rec_learned]))},
+                    "ndcg": {"rsc": float(np.nanmean(nd_rsc)), "full": float(np.nanmean(nd_full)), "lcb": ni["lcb"]},
+                    "anatomy": {"calls_mean": float(np.mean([a["calls_predicted"] for a in covered_rows])),
+                                "cert_core_mean": float(np.mean([a["cert_core"] for a in covered_rows])),
+                                "band_mean": float(np.mean([a["band"] for a in covered_rows])),
+                                "overshoot_mean": float(np.mean([a["overshoot"] for a in covered_rows]))},
+                }
+            out_name = "review3_dry" if args.limit else ("a8_split" if args.frozen_family_split else "review3")
+            od = ensure_dir(ROOT / cfg["paths"]["runs"] / out_name / teacher)
+            write_json(od / f"{domain}.json", out)
+            log(f"{teacher}/{domain}: env13 lambda {lam13:.3f}, calls mu traj {ladder['traj_mu']:.1f} env13 {ladder['env_all13']:.1f} rsc {ladder['rsc']:.1f}; replay==stat {env['all13']['replay_equals_stat_per_query']}")
     return 0
 
 

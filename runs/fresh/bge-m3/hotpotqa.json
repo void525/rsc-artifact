@@ -1,0 +1,115 @@
+{
+ "alpha": 0.05,
+ "delta_cfg": 0.008333333333333333,
+ "domain": "hotpotqa",
+ "k": 10,
+ "lambda": {
+  "ball": 4.814372924480414,
+  "btop": 4.699705681577831,
+  "env13": 3.201575960036734,
+  "rsc_finite": 3.2669581825129934,
+  "rsc_marginal": 3.097741819319207,
+  "rsc_pac": 3.2633945794175765,
+  "traj": 3.045934561842467
+ },
+ "methods": {
+  "adaptive_once": {
+   "calls": 62.5125,
+   "cp_hi": 0.03732942847232325,
+   "cp_lo": 0.022092952440984793,
+   "failures": 58,
+   "n": 2000,
+   "risk": 0.029
+  },
+  "ball": {
+   "calls": 88.686,
+   "cp_hi": 0.007197961714658002,
+   "cp_lo": 0.0014083038325025414,
+   "early_fraction": 0.4095,
+   "failures": 7,
+   "n": 2000,
+   "risk": 0.0035,
+   "witness": 0.0055
+  },
+  "btop": {
+   "calls": 87.808,
+   "cp_hi": 0.00852514124099515,
+   "cp_lo": 0.002059688528490358,
+   "early_fraction": 0.433,
+   "failures": 9,
+   "n": 2000,
+   "risk": 0.0045,
+   "witness": 0.007
+  },
+  "env13": {
+   "calls": 68.99,
+   "cp_hi": 0.03900775206020932,
+   "cp_lo": 0.023408686326406605,
+   "early_fraction": 0.7725,
+   "failures": 61,
+   "n": 2000,
+   "risk": 0.0305,
+   "witness": 0.041
+  },
+  "rsc_finite": {
+   "calls": 69.916,
+   "cp_hi": 0.035083640581425705,
+   "cp_lo": 0.02034685784883317,
+   "early_fraction": 0.762,
+   "failures": 54,
+   "n": 2000,
+   "risk": 0.027,
+   "witness": 0.0365
+  },
+  "rsc_marginal": {
+   "calls": 67.12,
+   "cp_hi": 0.045123210435492875,
+   "cp_lo": 0.028272282305312472,
+   "early_fraction": 0.794,
+   "failures": 72,
+   "n": 2000,
+   "risk": 0.036,
+   "witness": 0.0475
+  },
+  "rsc_pac": {
+   "calls": 69.872,
+   "cp_hi": 0.03564599123154172,
+   "cp_lo": 0.02078245517949868,
+   "early_fraction": 0.763,
+   "failures": 55,
+   "n": 2000,
+   "risk": 0.0275,
+   "witness": 0.037
+  },
+  "traj": {
+   "calls": 66.18,
+   "cp_hi": 0.0478855448268192,
+   "cp_lo": 0.030500774860506345,
+   "early_fraction": 0.803,
+   "failures": 77,
+   "n": 2000,
+   "risk": 0.0385,
+   "witness": 0.0495
+  },
+  "uniform_once": {
+   "calls": 71.0,
+   "cp_hi": 0.03452066078759859,
+   "cp_lo": 0.019911905907976403,
+   "failures": 53,
+   "n": 2000,
+   "risk": 0.0265
+  }
+ },
+ "n_cal": 2000,
+ "n_fresh": 2000,
+ "n_test_a8": 5405,
+ "shift": {
+  "A_k1_median_fresh": 1.1620255216739488,
+  "A_k1_median_test_a8": 1.1781684977982347,
+  "H_k_mean_fresh": 28.2255,
+  "H_k_mean_test_a8": 28.401295097132284,
+  "witness_rsc_finite_test_a8": 0.036632747456059205
+ },
+ "teacher": "bge-m3",
+ "thresholds_from": "A8 calibration set"
+}

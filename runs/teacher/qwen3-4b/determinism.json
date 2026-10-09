@@ -1,0 +1,92 @@
+{
+ "bit_stable": true,
+ "cache_settings": {
+  "hotpotqa": {
+   "attn": "sdpa",
+   "batch_size": 16,
+   "class": "Qwen3RerankerScorer",
+   "dtype": "bfloat16",
+   "instruction": "Given a web search query, retrieve relevant passages that answer the query",
+   "max_length": 512,
+   "max_tokens_per_batch": 65536,
+   "mode": "canonical",
+   "name": "Qwen/Qwen3-Reranker-4B"
+  },
+  "msmarco": {
+   "attn": "sdpa",
+   "batch_size": 16,
+   "class": "Qwen3RerankerScorer",
+   "dtype": "bfloat16",
+   "instruction": "Given a web search query, retrieve relevant passages that answer the query",
+   "max_length": 512,
+   "max_tokens_per_batch": 65536,
+   "mode": "canonical",
+   "name": "Qwen/Qwen3-Reranker-4B"
+  },
+  "nq": {
+   "attn": "sdpa",
+   "batch_size": 16,
+   "class": "Qwen3RerankerScorer",
+   "dtype": "bfloat16",
+   "instruction": "Given a web search query, retrieve relevant passages that answer the query",
+   "max_length": 512,
+   "max_tokens_per_batch": 65536,
+   "mode": "canonical",
+   "name": "Qwen/Qwen3-Reranker-4B"
+  }
+ },
+ "compositions": {
+  "cross_query_shuffled": {
+   "bit_identical_pairs": 1000,
+   "k": 10,
+   "max_abs_diff": 0.0,
+   "mean_abs_diff": 0.0,
+   "pairs": 1000,
+   "queries": 10,
+   "topk_order_changed_queries": 0
+  },
+  "per_query_reversed": {
+   "bit_identical_pairs": 1000,
+   "k": 10,
+   "max_abs_diff": 0.0,
+   "mean_abs_diff": 0.0,
+   "pairs": 1000,
+   "queries": 10,
+   "topk_order_changed_queries": 0
+  },
+  "single_pair_max_abs_diff": 0.0
+ },
+ "k": 10,
+ "max_abs_diff": 0.0,
+ "mean_abs_diff": 0.0,
+ "mode": "canonical",
+ "ok": true,
+ "pairs_checked": 2040,
+ "queries_checked": 10,
+ "settings": {
+  "attn": "sdpa",
+  "batch_size": 16,
+  "canonical_multiple": 64,
+  "class": "Qwen3RerankerScorer",
+  "cuda": "13.0",
+  "device": "cuda",
+  "dtype": "bfloat16",
+  "fast_pad_multiple": 8,
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "instruction": "Given a web search query, retrieve relevant passages that answer the query",
+  "max_length": 512,
+  "max_tokens_per_batch": 65536,
+  "mode": "canonical",
+  "model_id": "Qwen/Qwen3-Reranker-4B",
+  "name": "Qwen/Qwen3-Reranker-4B",
+  "no_id": 2152,
+  "padding_side": "left",
+  "score": "z_yes - z_no at the last position (fp32 two-row head)",
+  "torch": "2.14.0+cu130",
+  "transformers": "5.17.0",
+  "yes_id": 9693
+ },
+ "settings_match_cache": true,
+ "teacher": "qwen3-4b",
+ "topk_order_changed_queries": 0
+}

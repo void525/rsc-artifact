@@ -1,0 +1,46 @@
+{
+ "domains": {
+  "hotpotqa": {
+   "after_removing_frozen_ids": 80000,
+   "dedup_on_examined": {
+    "exact_internal": 0,
+    "exact_vs_protected": 0,
+    "kept": 8000,
+    "near_vs_protected": 0
+   },
+   "examined_in_draw_order": 8000,
+   "n": 2000,
+   "sha256": "035e5aceaa4254124e41d4d573ee3dbfa7628c9299c30182d62886e38ca6d76c",
+   "source_size": 85000
+  },
+  "msmarco": {
+   "after_removing_frozen_ids": 497939,
+   "dedup_on_examined": {
+    "exact_internal": 0,
+    "exact_vs_protected": 2,
+    "kept": 7997,
+    "near_vs_protected": 1
+   },
+   "examined_in_draw_order": 8000,
+   "n": 2000,
+   "sha256": "b21d5d6749c1412e262c6e9e2919adf0dc3583c21f57f73bf509b0fa3391fd16",
+   "source_size": 502939
+  },
+  "nq": {
+   "after_removing_frozen_ids": 82925,
+   "dedup_on_examined": {
+    "exact_internal": 0,
+    "exact_vs_protected": 1,
+    "kept": 7992,
+    "near_vs_protected": 7
+   },
+   "examined_in_draw_order": 8000,
+   "n": 2000,
+   "sha256": "5905cd06895500bdf720e0faa16fcbf5938bf8263fb200c6ac2d6a785dd4099a",
+   "source_size": 87925
+  }
+ },
+ "jaccard_threshold": 0.8,
+ "n_per_domain": 2000,
+ "seed": 20261009
+}

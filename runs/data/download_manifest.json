@@ -1,0 +1,19 @@
+{
+ "domains": {
+  "msmarco": {
+   "expected_corpus": 8841823,
+   "expected_test": 6980,
+   "n_corpus": 8841823,
+   "n_test_queries": 6980,
+   "pool_split": "dev",
+   "provenance": {
+    "source": "ukp",
+    "url": "https://public.ukp.informatik.tu-darmstadt.de/thakur/BEIR/datasets/msmarco.zip",
+    "zip_bytes": 1082258632,
+    "zip_sha256": "f46aed8343564261c27228b7cf22dde5c9a70143fe34dc3c589bd5322308712a"
+   },
+   "train_questions": 502939
+  }
+ },
+ "synthetic": false
+}

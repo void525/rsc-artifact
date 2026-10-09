@@ -31,6 +31,9 @@ SUB = ROOT / "submission"
 PAPER = ROOT / "paper"
 VENUE = "https://openreview.net/group?id=ACM.org/TheWebConf/2027/Conference_Long_Papers"
 TRACK = "Search, Recommendation, and Retrieval-Augmented AI"
+TLDR = ("An early reranking stop is wrong exactly when one gap of the query exceeds the threshold, so calibrating that gap "
+        "once bounds the risk of missing the teacher's exact top-k under every scoring policy.")
+assert len(TLDR) <= 250
 
 
 def run(cmd, timeout=1800):
@@ -158,7 +161,7 @@ def main() -> int:
         f"* **Venue**: {VENUE}", f"* **Track / primary subject area**: {TRACK}",
         "* **Industry paper**: No", f"* **Title** ({len(title)}/250 chars): {title}", "",
         f"* **Abstract** ({len(abst)}/5000 chars):", "", abst, "",
-        "* **TL;DR** (<=250 chars): One calibrated threshold on a rank-sufficient statistic lets a reranker stop early with a distribution-free bound on returning anything but the teacher's exact top-k, under every scoring order.",
+        f"* **TL;DR** ({len(TLDR)}/250 chars): {TLDR}",
         "* **Keywords**: web search reranking; early stopping; conformal calibration; risk control; top-k selection; efficiency", "",
         "* **Authors** (frozen at the abstract deadline):", "", authors_block(), "",
         "* **Required checkboxes**: all co-authors have OpenReview profiles; reviews may be made public if accepted; authors may be asked to review; the submission follows the CFP.",
