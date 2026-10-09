@@ -207,6 +207,58 @@ def main() -> int:
         span("HkMean", [sh[key]["H_k_mean_fresh"] for key in keys], "{:.1f}", "mean last-winner rank H_k")
         span("TestHkMean", [sh[key]["H_k_mean_test_a8"] for key in keys], "{:.1f}", "mean last-winner rank H_k on the post-freeze test set (reference)")
 
+    # ---- open-loop serving at fixed arrival rates (A11) --------------------------------------------------------------
+    olp = ROOT / cfg["paths"]["runs"] / "open_loop" / "qwen3-4b"
+    doms = main_domains(cfg)
+    if all((olp / f"{d}.json").exists() for d in doms) and (olp / "msmarco_pass2.json").exists():
+        OL = {d: read_json(olp / f"{d}.json") for d in doms}
+        OL2 = read_json(olp / "msmarco_pass2.json")
+        rhos = sorted(OL[doms[0]]["rhos"])
+        light, load = rhos[0], 1.2
+        cell = lambda d, m, rho, src=None: (src or OL[d])["cells"][f"{m}@{rho:g}"]  # noqa: E731
+        put("OpenNQueries", OL[doms[0]]["n_queries"], "queries per open-loop run", olp)
+        put("OpenCMax", OL[doms[0]]["c_max"], "largest number of queries in flight in the open-loop server", olp)
+        put("OpenRhoMin", f"{rhos[0]:g}", "smallest offered load (x full-teacher capacity)", olp)
+        put("OpenRhoMax", f"{rhos[-1]:g}", "largest offered load (x full-teacher capacity)", olp)
+        put("OpenRhoLoad", f"{load:g}", "offered load quoted in the text (x full-teacher capacity)", olp)
+        put("OpenCapMin", f"{min(OL[d]['c_full'] for d in doms):.2f}", "smallest closed-loop full-teacher capacity (q/s)", olp)
+        put("OpenCapMax", f"{max(OL[d]['c_full'] for d in doms):.2f}", "largest closed-loop full-teacher capacity (q/s)", olp)
+        for tag, m in (("Full", "full"), ("Blk", "rsc_blockers"), ("Prefix", "prefix_adaptive"), ("Rsc", "rsc")):
+            w = [cell(d, m, load)["queue_wait_mean_s"] for d in doms]
+            p = [cell(d, m, load)["latency_p95_s"] for d in doms]
+            put(f"Open{tag}WaitMin", f"{min(w):.1f}", f"smallest mean queueing wait of {m} at the quoted load (s)", olp)
+            put(f"Open{tag}WaitMax", f"{max(w):.1f}", f"largest mean queueing wait of {m} at the quoted load (s)", olp)
+            put(f"Open{tag}PNineFiveMin", f"{min(p):.1f}", f"smallest p95 latency of {m} at the quoted load (s)", olp)
+            put(f"Open{tag}PNineFiveMax", f"{max(p):.1f}", f"largest p95 latency of {m} at the quoted load (s)", olp)
+            r = [cell(d, m, light)["latency_p95_s"] / cell(d, "full", light)["latency_p95_s"] for d in doms]
+            put(f"Open{tag}LightRatioMin", f"{min(r):.2f}", f"smallest p95 ratio of {m} to the full teacher at the lightest load", olp)
+            put(f"Open{tag}LightRatioMax", f"{max(r):.2f}", f"largest p95 ratio of {m} to the full teacher at the lightest load", olp)
+        put("OpenRscSlowerLightCount", sum(cell(d, "rsc", light)["latency_p95_s"] > cell(d, "full", light)["latency_p95_s"] for d in doms),
+            "domains where 16/8 has a higher p95 than the full teacher at the lightest load", olp)
+        methods = ("full", "rsc", "rsc_blockers", "prefix_adaptive")
+        rel = [abs(cell("msmarco", m, rho, OL2)["latency_p95_s"] / cell("msmarco", m, rho)["latency_p95_s"] - 1) for m in methods for rho in rhos]
+        put("OpenPassTwoMaxChangePct", f"{100 * max(rel):.0f}", "largest relative change of a p95 between the two MS MARCO passes (%)", olp)
+        same = sum(sorted(methods, key=lambda m: cell("msmarco", m, rho)["latency_p95_s"]) == sorted(methods, key=lambda m: cell("msmarco", m, rho, OL2)["latency_p95_s"]) for rho in rhos)
+        put("OpenPassTwoSameOrderCount", same, "loads at which both MS MARCO passes order the four methods by p95 identically", olp)
+        put("OpenLoadsCount", len(rhos), "offered loads per domain", olp)
+        util = {m: [c["token_utilisation"] for d in doms for c in OL[d]["cells"].values() if c["method"] == m] for m in methods}
+        for tag, m in (("Full", "full"), ("Rsc", "rsc"), ("Blk", "rsc_blockers")):
+            put(f"Open{tag}UtilMin", f"{min(util[m]):.2f}", f"smallest real/padded token utilisation of {m}", olp)
+            put(f"Open{tag}UtilMax", f"{max(util[m]):.2f}", f"largest real/padded token utilisation of {m}", olp)
+        agree = [c["agree_with_cache"] for d in doms for c in OL[d]["cells"].values() if c["method"] == "full"]
+        put("OpenFullAgreeMin", f"{min(agree):.3f}", "smallest agreement of the live full teacher with the cached top-k", olp)
+        rng_seed = 20261009
+        code = {"nq": 1, "hotpotqa": 2, "msmarco": 3}
+        realized = []
+        for d, p in [(d, 1) for d in doms] + [("msmarco", 2)]:
+            u = np.cumsum(np.random.default_rng(np.random.SeedSequence([rng_seed, code[d], p])).exponential(1.0, size=OL[doms[0]]["n_queries"]))
+            realized.append((len(u) - 1) / (u[-1] - u[0]))
+        put("OpenRealizedRateMin", f"{min(realized):.3f}", "smallest realized/nominal arrival rate over the open-loop passes", olp)
+        put("OpenRealizedRateMax", f"{max(realized):.3f}", "largest realized/nominal arrival rate over the open-loop passes", olp)
+        flagged = {d: min([rho for rho in rhos if cell(d, "full", rho)["overloaded"]], default=None) for d in doms}
+        put("OpenFullFlagHotpot", f"{flagged['hotpotqa']:g}", "lowest load at which the registered criterion flags the full teacher on HotpotQA", olp)
+        put("OpenFullFlagOthers", f"{max(flagged['nq'], flagged['msmarco']):g}", "lowest load at which the registered criterion flags the full teacher on NQ and MS MARCO", olp)
+
     out = ROOT / "paper" / "numbers_extra.tex"
     out.write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(f"wrote {out} and paper/tables/tab_witness.tex")

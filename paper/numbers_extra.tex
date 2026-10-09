@@ -122,3 +122,49 @@
 \newcommand{\numFreshHkMeanMax}{45.6} % largest mean last-winner rank H_k on fresh queries <- runs/fresh
 \newcommand{\numFreshTestHkMeanMin}{21.0} % smallest mean last-winner rank H_k on the post-freeze test set (reference) on fresh queries <- runs/fresh
 \newcommand{\numFreshTestHkMeanMax}{43.5} % largest mean last-winner rank H_k on the post-freeze test set (reference) on fresh queries <- runs/fresh
+\newcommand{\numOpenNQueries}{300} % queries per open-loop run <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenCMax}{32} % largest number of queries in flight in the open-loop server <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenRhoMin}{0.6} % smallest offered load (x full-teacher capacity) <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenRhoMax}{1.5} % largest offered load (x full-teacher capacity) <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenRhoLoad}{1.2} % offered load quoted in the text (x full-teacher capacity) <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenCapMin}{1.11} % smallest closed-loop full-teacher capacity (q/s) <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenCapMax}{1.53} % largest closed-loop full-teacher capacity (q/s) <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenFullWaitMin}{10.2} % smallest mean queueing wait of full at the quoted load (s) <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenFullWaitMax}{22.3} % largest mean queueing wait of full at the quoted load (s) <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenFullPNineFiveMin}{46.5} % smallest p95 latency of full at the quoted load (s) <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenFullPNineFiveMax}{73.0} % largest p95 latency of full at the quoted load (s) <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenFullLightRatioMin}{1.00} % smallest p95 ratio of full to the full teacher at the lightest load <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenFullLightRatioMax}{1.00} % largest p95 ratio of full to the full teacher at the lightest load <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenBlkWaitMin}{0.7} % smallest mean queueing wait of rsc_blockers at the quoted load (s) <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenBlkWaitMax}{6.0} % largest mean queueing wait of rsc_blockers at the quoted load (s) <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenBlkPNineFiveMin}{5.6} % smallest p95 latency of rsc_blockers at the quoted load (s) <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenBlkPNineFiveMax}{35.6} % largest p95 latency of rsc_blockers at the quoted load (s) <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenBlkLightRatioMin}{0.51} % smallest p95 ratio of rsc_blockers to the full teacher at the lightest load <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenBlkLightRatioMax}{1.21} % largest p95 ratio of rsc_blockers to the full teacher at the lightest load <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenPrefixWaitMin}{0.5} % smallest mean queueing wait of prefix_adaptive at the quoted load (s) <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenPrefixWaitMax}{4.7} % largest mean queueing wait of prefix_adaptive at the quoted load (s) <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenPrefixPNineFiveMin}{3.1} % smallest p95 latency of prefix_adaptive at the quoted load (s) <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenPrefixPNineFiveMax}{21.8} % largest p95 latency of prefix_adaptive at the quoted load (s) <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenPrefixLightRatioMin}{0.35} % smallest p95 ratio of prefix_adaptive to the full teacher at the lightest load <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenPrefixLightRatioMax}{0.65} % largest p95 ratio of prefix_adaptive to the full teacher at the lightest load <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenRscWaitMin}{0.6} % smallest mean queueing wait of rsc at the quoted load (s) <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenRscWaitMax}{23.6} % largest mean queueing wait of rsc at the quoted load (s) <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenRscPNineFiveMin}{15.6} % smallest p95 latency of rsc at the quoted load (s) <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenRscPNineFiveMax}{74.3} % largest p95 latency of rsc at the quoted load (s) <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenRscLightRatioMin}{1.26} % smallest p95 ratio of rsc to the full teacher at the lightest load <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenRscLightRatioMax}{3.01} % largest p95 ratio of rsc to the full teacher at the lightest load <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenRscSlowerLightCount}{3} % domains where 16/8 has a higher p95 than the full teacher at the lightest load <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenPassTwoMaxChangePct}{51} % largest relative change of a p95 between the two MS MARCO passes (%) <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenPassTwoSameOrderCount}{4} % loads at which both MS MARCO passes order the four methods by p95 identically <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenLoadsCount}{4} % offered loads per domain <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenFullUtilMin}{0.58} % smallest real/padded token utilisation of full <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenFullUtilMax}{0.85} % largest real/padded token utilisation of full <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenRscUtilMin}{0.33} % smallest real/padded token utilisation of rsc <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenRscUtilMax}{0.68} % largest real/padded token utilisation of rsc <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenBlkUtilMin}{0.40} % smallest real/padded token utilisation of rsc_blockers <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenBlkUtilMax}{0.81} % largest real/padded token utilisation of rsc_blockers <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenFullAgreeMin}{1.000} % smallest agreement of the live full teacher with the cached top-k <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenRealizedRateMin}{0.954} % smallest realized/nominal arrival rate over the open-loop passes <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenRealizedRateMax}{1.073} % largest realized/nominal arrival rate over the open-loop passes <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenFullFlagHotpot}{0.9} % lowest load at which the registered criterion flags the full teacher on HotpotQA <- runs/open_loop/qwen3-4b
+\newcommand{\numOpenFullFlagOthers}{1.2} % lowest load at which the registered criterion flags the full teacher on NQ and MS MARCO <- runs/open_loop/qwen3-4b

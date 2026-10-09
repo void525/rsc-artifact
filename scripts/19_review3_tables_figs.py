@@ -188,7 +188,7 @@ def orders_figure(keys, r3, path: Path):
                          "font.size": 7.5, "axes.labelsize": 7.5, "xtick.labelsize": 7, "ytick.labelsize": 7.5, "legend.fontsize": 7,
                          "axes.linewidth": 0.5, "xtick.major.width": 0.5, "ytick.major.width": 0, "xtick.major.size": 2.0,
                          "axes.edgecolor": "#6B7280", "xtick.color": COL["text"], "ytick.color": COL["text"], "axes.labelcolor": COL["text"]})
-    fig, (axr, axc) = plt.subplots(1, 2, figsize=(7.0, 2.25), gridspec_kw={"width_ratios": [1.0, 1.18], "wspace": 0.05}, sharey=True)
+    fig, (axr, axc) = plt.subplots(1, 2, figsize=(7.0, 2.12), gridspec_kw={"width_ratios": [1.0, 1.18], "wspace": 0.05}, sharey=True)
     y = np.arange(len(ORDERS))[::-1].astype(float)
     risk_methods = [("rsc", "rsc", r"\textsc{RSC-Rank} ($A_{k,1}$)", 0.24), ("sc_adaptive", "sc", "set completion", 0.08), ("env_all13", "env", "13-policy envelope", -0.08), ("traj", "traj", "one trajectory, transferred", -0.24)]
     for m, c, lab, off in risk_methods:
@@ -259,7 +259,7 @@ def ladder_figure(keys, stats, r3, path: Path):
                          "font.size": 7, "axes.labelsize": 7, "xtick.labelsize": 6.6, "ytick.labelsize": 7, "legend.fontsize": 6.6,
                          "axes.linewidth": 0.5, "xtick.major.width": 0.5, "xtick.major.size": 2.0, "axes.edgecolor": "#6B7280",
                          "xtick.color": COL["text"], "ytick.color": COL["text"], "axes.labelcolor": COL["text"]})
-    fig, ax = plt.subplots(figsize=(3.33, 1.86))
+    fig, ax = plt.subplots(figsize=(3.33, 1.76))
     y = np.arange(len(keys))[::-1].astype(float)
     series = [
         ("set", "committed set, at once", lambda k: r3[k]["headline"]["adaptive_once"]["calls"] if "headline" in r3[k] else stats[k]["calls"]["adaptive_prefix"]["mean"], dict(marker="D", ms=3.4, mfc="white", mec=COL["sc"], mew=0.9, color=COL["sc"])),

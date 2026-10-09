@@ -22,20 +22,21 @@ python bootstrap.py --no-torch                                  # numpy/scipy on
 ## Where each table and figure comes from
 All of them are regenerated from the shipped result files, without data or GPUs:
 ```
-python scripts/19_review3_tables_figs.py && python scripts/21_matched_numbers.py && python scripts/24_extra_numbers.py
+python scripts/19_review3_tables_figs.py && python scripts/21_matched_numbers.py && python scripts/24_extra_numbers.py && python scripts/29_open_loop_figure.py
 ```
 
 | Paper | Script | Result files |
 |---|---|---|
 | Table 1 (witness risk) | `24_extra_numbers.py`; from query-level data, `27_query_level_check.py` | `runs/a8_split/grid_frontier.json` (from `22_grid_frontier.py`), `runs/a8_split/<teacher>/<domain>.json`, `runs/calib/<teacher>/<domain>/stats_{cal,test}_k10.jsonl` |
-| Table 2, Table 4a, Figures 3-4 | `19_review3_tables_figs.py` | `runs/a8_split/<teacher>/<domain>.json`, `runs/stats/` |
-| Table 3 | `19_review3_tables_figs.py` | `runs/throughput/`, `runs/throughput_rep/pass2|pass3/` |
-| Table 4b | `24_extra_numbers.py` | `runs/stats/<teacher>/<domain>.json` |
-| Table 4c | `12_paper_numbers.py` | `runs/data/splits_manifest.json` (split sizes; the post-freeze query ids are in `runs/a8_split/splits/`) |
-| Table 4d | `21_matched_numbers.py` | `runs/matched_service/aggregate.json` |
+| Table 2, Table 3a, Figures 3-4 | `19_review3_tables_figs.py` | `runs/a8_split/<teacher>/<domain>.json`, `runs/stats/` |
+| Figure 5 (open-loop serving) | `28_open_loop.py` (GPU) -> `29_open_loop_figure.py`, `24_extra_numbers.py` | `runs/open_loop/qwen3-4b/<domain>.json`, `runs/open_loop/qwen3-4b/msmarco_pass2.json` (every cell: offered and achieved rate, p50/p95/p99, queueing wait, token utilisation, agreement) |
+| Closed-loop timings quoted in Section 7 (full table: `paper/tables/tab_throughput_v3.tex`) | `19_review3_tables_figs.py` | `runs/throughput/`, `runs/throughput_rep/pass2|pass3/` (earlier split) |
+| Table 3b | `24_extra_numbers.py` | `runs/stats/<teacher>/<domain>.json` |
+| Table 3c | `12_paper_numbers.py` | `runs/data/splits_manifest.json` (split sizes; the post-freeze query ids are in `runs/a8_split/splits/`) |
+| Table 3d | `21_matched_numbers.py` | `runs/matched_service/aggregate.json` |
 | Proposition 6 numbers | `22_grid_frontier.py` -> `24_extra_numbers.py` | `runs/a8_split/grid_frontier.json` |
 | Tuned micro-batch decomposition | `23_tuned_disagreement.py` (GPU) -> `24_extra_numbers.py` | `runs/latency_tuned_diff/<teacher>/<domain>.json` |
-| Table 5, own-target scale head for B_all | `26_own_target_scale.py` -> `24_extra_numbers.py` | `runs/own_target/<teacher>/<domain>.json` (curve per configuration, B_all with three scale heads) |
+| Table 4, own-target scale head for B_all | `26_own_target_scale.py` -> `24_extra_numbers.py` | `runs/own_target/<teacher>/<domain>.json` (curve per configuration, B_all with three scale heads) |
 | Fresh queries (Section 7, Appendix B) | `25_fresh_queries.py` (every stage needs the BEIR data; `features` and `teacher` need a GPU) -> `24_extra_numbers.py` | `runs/fresh/<teacher>/<domain>.json`, drawn ids in `runs/fresh/splits/`, pipeline manifests in `data/fresh/**/manifest.json` |
 | Figures 1-2 | TikZ | `paper/figures/fig_example.tex`, `paper/figures/fig_overview.tex` |
 
@@ -44,7 +45,7 @@ python scripts/19_review3_tables_figs.py && python scripts/21_matched_numbers.py
 (protocol, thresholds, seeds). Data (BEIR NQ / HotpotQA / FiQA / SciFact, MS MARCO passage) and model weights
 (Qwen3-Reranker-4B, bge-reranker-v2-m3, cross-encoder/ms-marco-MiniLM-L6-v2) are downloaded by the scripts and are
 not included (size, licences). `docs/PREREGISTRATION.md` is the pre-registration with its append-only amendment log
-(A1–A10); `docs/THEORY.md` the mathematical statements and proofs with pointers to the tests that check them.
+(A1–A11); `docs/THEORY.md` the mathematical statements and proofs with pointers to the tests that check them.
 `scripts/18_order_free_baselines.py` computes the set-completion prefixes, the declared-family envelopes and Bonferroni.
 `scripts/18_order_free_baselines.py --frozen-family-split` is amendment A8: one redraw, seed 20261006, reused from
 `runs/a8_split/splits/`, with outputs in `runs/a8_split/<teacher>/<domain>.json`. `scripts/19_review3_tables_figs.py`
@@ -62,6 +63,7 @@ reads those outputs when all six files exist.
 * `runs/a8_split/grid_frontier.json` — the last-winner identity, the checkpoint-grid critical value and its threshold, and the all-subset witness risk at the three guardrail thresholds, on the same split.
 * `runs/latency_tuned_diff/` — the 300 timed queries re-scored at the tuned micro-batch and compared with the canonical cache (order-only changes, membership changes, boundary gaps, nDCG@10).
 * `runs/fresh/` — amendment A10 (i): 2,000 queries per domain drawn from the training-question sources after removing every frozen query, scored through the same pipeline and evaluated at the frozen post-freeze thresholds (risk with Clopper–Pearson interval, witness risk, calls, for every method).
+* `runs/open_loop/qwen3-4b/` — amendment A11: open-loop serving under Poisson arrivals at 0.6–1.5x the full teacher's closed-loop capacity on 300 post-freeze test queries per domain (second MS MARCO pass in `msmarco_pass2.json`). The registered overload flag compares the completion rate with the nominal offered rate; the realized arrival rate over 300 arrivals differs from nominal by up to about 7 %, so read it together with the queueing wait.
 * `runs/own_target/` — amendment A10 (ii)-(iii): B_all with a scale head fitted to its own target (next to the winners' head and sigma = 1), and the risk–calls curve for alpha in {0.01, 0.02, 0.05, 0.10, 0.20}.
 * `runs/throughput_rep/pass2|pass3/` — the repeated timed passes of the C = 32 throughput cells, on the preceding split.
 * `runs/matched_service/` — the matched serving run on the preceding split (submit-only set, full-pool set completion, RSC and the envelope; BM25 and the other cheap model; three passes at C = 32). Not re-timed after A8.
