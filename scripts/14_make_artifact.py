@@ -82,7 +82,7 @@ def main() -> int:
                    "review3/**/*.json", "throughput_rep/**/*.json", "matched_service/**/*.json",
                    "a8_split/**/*.json", "a8_split/PROTOCOL.txt", "latency_tuned_diff/**/*.json", "data/*.json", "data/LICENSES.md",
                    "N200/*.json", "N200h/*.json", "candidates/manifest.json", "teacher/*/determinism.json", "heads/*/report.json",
-                   "frozen_eval/heads/*/report.json", "distilled_eval/heads/*/report.json", "fresh/**/*.json", "own_target/**/*.json"]
+                   "frozen_eval/heads/*/report.json", "distilled_eval/heads/*/report.json", "fresh/**/*.json", "own_target/**/*.json", "calib/*/*/stats_*_k10.jsonl"]
     for g in extra_globs:
         for f in sorted(runs.glob(g)):
             if f.is_file() and f.stat().st_size < 5_000_000:

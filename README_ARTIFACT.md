@@ -15,6 +15,8 @@ python bootstrap.py --no-torch                                  # numpy/scipy on
                                                                 # and Propositions 3-7, the hypergeometric identity of Theorem 10
 ./.venv/Scripts/python.exe scripts/smoke_pipeline.py --no-latex # synthetic end-to-end run of every script
 ./.venv/Scripts/python.exe -c "import sys; sys.path.insert(0, 'src'); from rscrank.provenance import verify_registry; print(verify_registry() or 'every registered number matches its shipped source')"
+./.venv/Scripts/python.exe scripts/27_query_level_check.py      # thresholds, Table 1 witness risks and the committed-set
+                                                                # results of Table 2, recomputed from query-level statistics
 ```
 
 ## Where each table and figure comes from
@@ -25,7 +27,7 @@ python scripts/19_review3_tables_figs.py && python scripts/21_matched_numbers.py
 
 | Paper | Script | Result files |
 |---|---|---|
-| Table 1 (witness risk) | `24_extra_numbers.py` | `runs/a8_split/grid_frontier.json` (from `22_grid_frontier.py`), `runs/a8_split/<teacher>/<domain>.json` |
+| Table 1 (witness risk) | `24_extra_numbers.py`; from query-level data, `27_query_level_check.py` | `runs/a8_split/grid_frontier.json` (from `22_grid_frontier.py`), `runs/a8_split/<teacher>/<domain>.json`, `runs/calib/<teacher>/<domain>/stats_{cal,test}_k10.jsonl` |
 | Table 2, Table 4a, Figures 3-4 | `19_review3_tables_figs.py` | `runs/a8_split/<teacher>/<domain>.json`, `runs/stats/` |
 | Table 3 | `19_review3_tables_figs.py` | `runs/throughput/`, `runs/throughput_rep/pass2|pass3/` |
 | Table 4b | `24_extra_numbers.py` | `runs/stats/<teacher>/<domain>.json` |
@@ -64,6 +66,7 @@ reads those outputs when all six files exist.
 * `runs/throughput_rep/pass2|pass3/` — the repeated timed passes of the C = 32 throughput cells, on the preceding split.
 * `runs/matched_service/` — the matched serving run on the preceding split (submit-only set, full-pool set completion, RSC and the envelope; BM25 and the other cheap model; three passes at C = 32). Not re-timed after A8.
 * `runs/calib/<teacher>/<domain>/lambdas.json` — calibrated thresholds for every k, alpha and regime.
+* `runs/calib/<teacher>/<domain>/stats_{cal,test}_k10.jsonl` — one line per query of every pool (k = 10): A_k1–A_k3, B_top, B_all, H_k, the deployed-trajectory critical value, the budget-head prediction and the scale. The post-freeze split is a partition of these queries (`runs/a8_split/splits/`), so every threshold and witness risk can be recomputed without teacher scores.
 * `paper/tables/*.tex` — all generated tables, including the full versions (`*_full.tex`) that did not fit the PDF.
 * `runs/N200/` — the N = 200 sensitivity run (when present).
 
